@@ -1,30 +1,41 @@
 from django.contrib import admin
 from django.urls import include, path
+
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
 
+    # Accounts & Authentication
+    path("api/v1/accounts/", include("accounts.urls")),
     path(
-        'api/v1/',
-        include('common.urls')
+        "api/v1/accounts/login/",
+        TokenObtainPairView.as_view(),
+        name="token_obtain_pair",
+    ),
+    path(
+        "api/v1/accounts/token/refresh/",
+        TokenRefreshView.as_view(),
+        name="token_refresh",
     ),
 
-    path(
-        'api/schema/',
-        SpectacularAPIView.as_view(),
-        name='schema'
-    ),
+    # Common & Health Check
+    path("api/v1/", include("common.urls")),
 
+    # API Documentation (Swagger / OpenAPI)
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-        'api/docs/',
-        SpectacularSwaggerView.as_view(
-            url_name='schema'
-        ),
-        name='swagger-ui'
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
     ),
 ]
