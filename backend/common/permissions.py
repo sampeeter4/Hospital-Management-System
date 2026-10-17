@@ -14,6 +14,19 @@ class IsHospitalAdmin(BasePermission):
         )
 
 
+class IsHospitalAdminOrReadOnly(BasePermission):
+    """
+    Allows read access to any authenticated user, but write access only to Super Admins and Hospital Admins.
+    """
+
+    def has_permission(self, request, view):
+        if not (request.user and request.user.is_authenticated):
+            return False
+        if request.method in ["GET", "HEAD", "OPTIONS"]:
+            return True
+        return request.user.role in ["SUPER_ADMIN", "HOSPITAL_ADMIN"]
+
+
 class IsDoctor(BasePermission):
     """
     Allows access only to Doctors.
@@ -103,3 +116,4 @@ class IsAccountant(BasePermission):
             and request.user.is_authenticated
             and request.user.role == "ACCOUNTANT"
         )
+

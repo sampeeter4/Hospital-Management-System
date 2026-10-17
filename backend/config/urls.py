@@ -28,6 +28,9 @@ urlpatterns = [
         name="token_refresh",
     ),
 
+    # Hospitals & Organization Structure
+    path("api/v1/", include("hospitals.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

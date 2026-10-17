@@ -12,3 +12,4 @@ urlpatterns = [
     path("profile/", profile, name="profile"),
     path("change-password/", change_password, name="change-password"),
 ]
+

@@ -89,3 +89,4 @@ class ChangePasswordSerializer(serializers.Serializer):
                 "new_password": "Passwords do not match."
             })
         return data
+
