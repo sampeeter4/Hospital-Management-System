@@ -22,3 +22,4 @@ urlpatterns = [
     path("patients/me/timeline/", PatientTimelineView.as_view(), {"patient_id": "me"}, name="patient-timeline-me"),
     path("patients/<int:patient_id>/timeline/", PatientTimelineView.as_view(), name="patient-timeline"),
 ] + router.urls
+

@@ -448,3 +448,4 @@ class PatientTimelineView(APIView):
         category = request.query_params.get("category")
         timeline = build_patient_timeline(patient=patient, user=user, category=category)
         return Response(timeline, status=status.HTTP_200_OK)
+

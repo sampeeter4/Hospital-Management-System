@@ -40,6 +40,9 @@ urlpatterns = [
     # Medical Records & Clinical Management
     path("api/v1/medical-records/", include("medical_records.urls")),
 
+    # Prescriptions & Pharmacy Management
+    path("api/v1/pharmacy/", include("pharmacy.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

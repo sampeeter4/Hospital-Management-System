@@ -245,3 +245,4 @@ def build_patient_timeline(patient, user, category=None):
     # Sort reverse chronologically
     timeline.sort(key=lambda item: item["timestamp"], reverse=True)
     return timeline
+

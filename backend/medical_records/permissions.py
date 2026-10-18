@@ -255,3 +255,4 @@ class MedicalHistoryPermission(BasePermission):
             return request.method in SAFE_METHODS and hasattr(user, "patient_profile") and obj.patient_id == user.patient_profile.id
 
         return False
+

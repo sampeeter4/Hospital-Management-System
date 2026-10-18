@@ -666,3 +666,4 @@ class AuditTrailAndSecurityTests(BaseMedicalRecordsTestCase):
         diag_url = reverse("diagnosis-list")
         resp_diag = self.client.get(diag_url)
         self.assertEqual(resp_diag.status_code, status.HTTP_403_FORBIDDEN)
+

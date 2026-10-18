@@ -583,3 +583,4 @@ class PatientTimelineEventSerializer(serializers.Serializer):
     title = serializers.CharField()
     summary = serializers.CharField()
     details = serializers.DictField()
+

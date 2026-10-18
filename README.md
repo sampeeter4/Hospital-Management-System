@@ -118,7 +118,23 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Automated test suite with 29 new tests (94 total tests passing across Phases 1-6)
 
-### Phase 7
-- [ ] Prescriptions & Pharmacy
+### Phase 7 - Prescriptions & Pharmacy Management
+- [x] `pharmacy` app created
+- [x] `Medicine` catalogue model (generic name, brand name, dosage forms, active ingredients, strength, dispensing unit, low-stock threshold)
+- [x] `PharmacyLocation` model providing physical inventory locations scoped to specific hospitals
+- [x] `MedicineBatch` model with batch numbers, expiry dates, purchase/selling prices, and non-negative stock constraints
+- [x] `StockMovement` immutable append-only audit trail logging receipts, dispenses, returns, adjustments, expired stock, and wastage
+- [x] `Prescription` and `PrescriptionItem` models with unique references (`RX-YYYYMMDD-XXXXXX`), dosage instructions, frequencies, durations, and status lifecycle (`DRAFT`, `ISSUED`, `PARTIALLY_DISPENSED`, `DISPENSED`, `CANCELLED`)
+- [x] `DispenseRecord` and `DispensedItem` models with unique references (`DISP-YYYYMMDD-XXXXXX`), atomic inventory deduction, and over-dispense prevention
+- [x] Dispensing services with row-level locking (`select_for_update()`), partial dispensing, return/reversal workflows, and automated expiry quarantining
+- [x] Allergy safety and clinical warning service checking active ingredients against patient recorded allergies with documented prescriber override requirement
+- [x] Role-based access control (RBAC): Doctors (prescribing & issuing), Pharmacists (inventory receipts, adjustments, dispensing, returns), Patients (own prescriptions only), Nurses & non-clinical staff blocked
+- [x] Django Admin registration with inlines, search, and filters
+- [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
+- [x] Automated test suite with 21 new tests (115 total tests passing across Phases 1–7)
+
+### Phase 8
+- [ ] Laboratory & Diagnostics
+
 
 
