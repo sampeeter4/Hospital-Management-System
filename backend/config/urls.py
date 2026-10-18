@@ -34,6 +34,9 @@ urlpatterns = [
     # Patients Management
     path("api/v1/", include("patients.urls")),
 
+    # Appointments & Scheduling
+    path("api/v1/", include("appointments.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

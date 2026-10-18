@@ -99,3 +99,4 @@ class PatientAdmin(admin.ModelAdmin):
             },
         ),
     )
+

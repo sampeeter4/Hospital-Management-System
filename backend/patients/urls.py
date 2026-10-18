@@ -7,3 +7,4 @@ router = DefaultRouter()
 router.register("patients", PatientViewSet, basename="patient")
 
 urlpatterns = router.urls
+

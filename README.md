@@ -87,5 +87,22 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Comprehensive automated test suite (13 new tests, 37 total tests passing)
 
-### Phase 5
-- [ ] Appointment Management & Scheduling
+### Phase 5 - Appointment & Scheduling
+- [x] `appointments` app created
+- [x] `DoctorAvailability` model with weekly recurring schedules, configurable slot durations (10, 15, 20, 30, 45, 60 mins), effective date windows, and overlap prevention
+- [x] `Appointment` model with auto-generated unique references (`APT-YYYYMMDD-XXXX`), relations to Patient, Doctor, Hospital, Department, and status state machine
+- [x] `AppointmentStatusHistory` model providing immutable audit trail for all status transitions with actor and reason tracking
+- [x] Booking validation service preventing doctor double-booking, patient double-booking, schedule bounds violation, unaligned slots, and past dates
+- [x] Available slot generation service dynamically computing unbooked time slots
+- [x] State transition service with strict transition rules (PENDING -> CONFIRMED -> CHECKED_IN -> IN_PROGRESS -> COMPLETED; CANCELLED; NO_SHOW)
+- [x] REST APIs for Doctor Availability CRUD and Appointment lifecycle workflows
+- [x] Specialized action endpoints: `/my/`, `/available-slots/`, `/confirm/`, `/check-in/`, `/start/`, `/complete/`, `/cancel/`, `/reschedule/`, `/no-show/`, `/history/`
+- [x] Role-based access control (RBAC): Patient self-service (book, cancel, reschedule, view own, confidential notes masked), Doctor clinical workflows, Receptionist desk management, Nurse check-in, unauthorized roles blocked
+- [x] Search, filtering (doctor, patient, hospital, department, date, status, type), and pagination
+- [x] Django Admin registration with tabular inlines for status history
+- [x] OpenAPI/Swagger documentation with drf-spectacular
+- [x] Comprehensive test suite covering availabilities, booking conflicts, state transitions, RBAC, and slot calculations
+
+### Phase 6
+- [ ] Medical Records (EHR) & Clinical Encounters
+

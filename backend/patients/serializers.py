@@ -154,3 +154,4 @@ class PatientMeSerializer(serializers.ModelSerializer):
         if value and value > timezone.now().date():
             raise serializers.ValidationError("Date of birth cannot be in the future.")
         return value
+

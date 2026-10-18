@@ -183,3 +183,4 @@ class Patient(models.Model):
     def __str__(self):
         user_name = self.user.get_full_name() if self.user else ""
         return f"{self.mrn} - {user_name or self.user.username}"
+

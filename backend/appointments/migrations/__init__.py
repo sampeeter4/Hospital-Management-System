@@ -1,0 +1,2 @@
+# appointments migrations package
+

@@ -4,6 +4,7 @@ Django settings for Hospital Management System.
 
 from datetime import timedelta
 from pathlib import Path
+import sys
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'accounts',
     'hospitals',
     'patients',
+    'appointments',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +127,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+if 'test' in sys.argv:
+    PASSWORD_HASHERS = [
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    ]
+
 
 
 # Internationalization
