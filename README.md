@@ -150,8 +150,28 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular
 - [x] Comprehensive test suite with 14 new tests (129 total tests passing across Phases 1–8)
 
-### Phase 9
-- [ ] Inpatient & Admissions Management (IPD)
+### Phase 9 - Hospital Admissions, Beds & Wards Management
+- [x] `inpatient` app created
+- [x] `Ward` model associated with Hospital, optional department, ward types (General, Private, ICU, Pediatric, Maternity, etc.), gender policy, floor location, and safe deactivation rules
+- [x] `Room` model linked to Ward with room numbers, room types, capacity constraints (enforcing bed count <= room capacity), and deactivation checks
+- [x] `Bed` model with bed numbers, bed types (Standard, ICU, Pediatric, Bariatric, Electric, Isolation), operational statuses (`AVAILABLE`, `RESERVED`, `OCCUPIED`, `CLEANING`, `MAINTENANCE`, `INACTIVE`), and equipment details
+- [x] `Admission` model with auto-generated references (`ADM-YYYYMMDD-XXXXXX`), relationship to Patient, Hospital, Attending Doctor, Department, Encounter, and Appointment, admission types (`ELECTIVE`, `EMERGENCY`, `TRANSFER`, `NEWBORN`, `OBSERVATION`), and status lifecycle (`REQUESTED`, `ADMITTED`, `DISCHARGED`, `CANCELLED`)
+- [x] `BedAssignment` model maintaining immutable historical bed movements and active occupancy with conditional database constraints preventing double allocation
+- [x] `BedReservation` model supporting scheduled bed reservations with expiry tracking and automated fulfillment on admission
+- [x] `InpatientAuditLog` immutable append-only audit trail capturing ward/room/bed configuration, admissions, bed allocations, transfers, releases, and discharges
+- [x] Reusable transactional services with concurrency-safe row-level locking (`select_for_update()`): `admit_patient`, `transfer_patient`, `discharge_patient`, `update_bed_operational_status`, `reserve_bed`, `cancel_bed_reservation`, and `calculate_occupancy_report`
+- [x] Specialized REST endpoints:
+  - Wards: `GET/POST /api/v1/inpatient/wards/`, `GET/PATCH /api/v1/inpatient/wards/{id}/`, `GET /api/v1/inpatient/wards/{id}/occupancy/`
+  - Rooms: `GET/POST /api/v1/inpatient/rooms/`, `GET/PATCH /api/v1/inpatient/rooms/{id}/`
+  - Beds: `GET/POST /api/v1/inpatient/beds/`, `GET/PATCH /api/v1/inpatient/beds/{id}/`, `GET /api/v1/inpatient/beds/available/`, `POST /api/v1/inpatient/beds/{id}/update-status/`, `POST /api/v1/inpatient/beds/{id}/reserve/`
+  - Admissions: `GET/POST /api/v1/inpatient/admissions/`, `GET/PATCH /api/v1/inpatient/admissions/{id}/`, `POST /api/v1/inpatient/admissions/{id}/admit/`, `POST /api/v1/inpatient/admissions/{id}/transfer/`, `POST /api/v1/inpatient/admissions/{id}/discharge/`, `POST /api/v1/inpatient/admissions/{id}/cancel/`, `GET /api/v1/inpatient/admissions/{id}/bed-history/`
+  - Bed Assignments: `GET /api/v1/inpatient/assignments/`
+  - Occupancy: `GET /api/v1/inpatient/occupancy/`
+  - Audit Logs: `GET /api/v1/inpatient/audit-logs/`
+- [x] Role-based access control (RBAC): Doctors & Admins (admit, transfer, clinical discharge), Nurses (admit, transfer, operational bed status updates), Receptionists (admission requests, bed allocation), Patients (own admission data only), unauthorized staff blocked
+- [x] Django Admin registration with tabular inlines for rooms, beds, and bed assignments
+- [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
+- [x] Automated test suite with 16 new tests (**145 total tests passing** across Phases 1–9)
 
-
-
+### Phase 10
+- [ ] Billing, Payments & Insurance Claims Management

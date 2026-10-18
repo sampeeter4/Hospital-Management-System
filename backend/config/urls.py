@@ -46,6 +46,9 @@ urlpatterns = [
     # Laboratory & Diagnostics Management
     path("api/v1/laboratory/", include("laboratory.urls")),
 
+    # Hospital Admissions, Beds & Wards Management
+    path("api/v1/inpatient/", include("inpatient.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

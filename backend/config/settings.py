@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'medical_records',
     'pharmacy',
     'laboratory',
+    'inpatient',
 ]
 
 MIDDLEWARE = [
