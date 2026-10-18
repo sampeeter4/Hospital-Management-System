@@ -133,8 +133,25 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Automated test suite with 21 new tests (115 total tests passing across Phases 1–7)
 
-### Phase 8
-- [ ] Laboratory & Diagnostics
+### Phase 8 - Laboratory & Diagnostics Management
+- [x] `laboratory` app created
+- [x] `LabTest` catalogue model (codes, categories, specimen matrices, collection/prep instructions, methodologies, turnaround times)
+- [x] `LabTestParameter` model supporting numeric, qualitative, boolean, and textual observations
+- [x] `LabReferenceRange` model supporting age- and gender-stratified normal ranges and critical low/high thresholds
+- [x] `LabOrder` and `LabOrderItem` models with unique auto-generated references (`LAB-YYYYMMDD-XXXXXX`), priority management (ROUTINE, URGENT, STAT), and lifecycle tracking
+- [x] `LabSpecimen` model with unique barcodes (`SPEC-YYYYMMDD-XXXXXX`), automated matrix-based specimen accessioning, collection location tracking, and rejection handling with documented clinical reasons
+- [x] `LabResult` and `LabResultParameter` models with unique references (`RES-YYYYMMDD-XXXXXX`), automatic parameter evaluation (normal, low, high, abnormal), and critical alert detection
+- [x] `LabResultCorrection` model providing append-only audited result corrections preserving original verified numbers and narrative
+- [x] `CriticalResultNotification` model with unique references (`CRIT-YYYYMMDD-XXXXXX`) and clinician acknowledgement workflow
+- [x] `LabAuditLog` immutable append-only laboratory audit trail tracking orders, specimens, results, corrections, and alerts
+- [x] Specialized REST endpoints: `/api/v1/laboratory/tests/`, `/orders/`, `/orders/{id}/cancel/`, `/specimens/`, `/specimens/{id}/collect/`, `/specimens/{id}/receive/`, `/specimens/{id}/reject/`, `/results/`, `/results/enter/`, `/results/{id}/verify/`, `/results/{id}/correct/`, `/patients/me/results/`, `/patients/{id}/results/`, `/critical-notifications/`, `/critical-notifications/{id}/acknowledge/`, `/audit-logs/`
+- [x] Role-based access control (RBAC): Doctors (ordering tests & acknowledging critical results), Lab Technicians (accessioning, processing, entering & verifying results, corrections), Nurses (specimen collection), Patients (own released results only; unverified drafts hidden), unauthorized staff blocked
+- [x] Django Admin registration with tabular inlines for test parameters, reference ranges, order items, result parameters, and corrections
+- [x] OpenAPI/Swagger documentation with drf-spectacular
+- [x] Comprehensive test suite with 14 new tests (129 total tests passing across Phases 1–8)
+
+### Phase 9
+- [ ] Inpatient & Admissions Management (IPD)
 
 
 

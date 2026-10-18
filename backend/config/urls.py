@@ -43,6 +43,9 @@ urlpatterns = [
     # Prescriptions & Pharmacy Management
     path("api/v1/pharmacy/", include("pharmacy.urls")),
 
+    # Laboratory & Diagnostics Management
+    path("api/v1/laboratory/", include("laboratory.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 
