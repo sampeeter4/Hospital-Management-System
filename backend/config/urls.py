@@ -37,6 +37,9 @@ urlpatterns = [
     # Appointments & Scheduling
     path("api/v1/", include("appointments.urls")),
 
+    # Medical Records & Clinical Management
+    path("api/v1/medical-records/", include("medical_records.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

@@ -103,6 +103,22 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular
 - [x] Comprehensive test suite covering availabilities, booking conflicts, state transitions, RBAC, and slot calculations
 
-### Phase 6
-- [ ] Medical Records (EHR) & Clinical Encounters
+### Phase 6 - Medical Records & Clinical Management
+- [x] `medical_records` app created
+- [x] `ClinicalEncounter` model with unique references (`ENC-YYYYMMDD-XXXXXX`), relationship to Patient, Doctor, Hospital, Department, and Appointment (with cancellation/no-show validation)
+- [x] `VitalSigns` model supporting multiple measurements per encounter, physiological range validation, and authoritative server-computed BMI (metric and imperial)
+- [x] `EncounterDiagnosis` model supporting provisional, confirmed, and differential diagnoses, ICD-10 coding, and single primary diagnosis constraint
+- [x] `ClinicalNote` model supporting structured SOAP documentation, draft/signed status, and patient portal visibility control
+- [x] `ClinicalNoteAddendum` model enforcing immutable signed notes with auditable corrections and preserved original narrative
+- [x] `MedicalHistoryEntry` model for longitudinal medical history (past medical, surgical, family, social, chronic conditions)
+- [x] `ClinicalAuditLog` append-only audit trail tracking clinical events and modifications
+- [x] Chronological Patient Medical Timeline endpoint (`/api/v1/medical-records/patients/{patient_id}/timeline/` and `/me/timeline/`)
+- [x] Role-based access control (RBAC): Doctors (clinical authoring/signing/closing), Nurses (vitals recording), Patients (own records, patient-visible signed notes only, internal notes hidden), Receptionists & non-clinical staff blocked
+- [x] Django Admin registration with inlines and privacy protection
+- [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
+- [x] Automated test suite with 29 new tests (94 total tests passing across Phases 1-6)
+
+### Phase 7
+- [ ] Prescriptions & Pharmacy
+
 
