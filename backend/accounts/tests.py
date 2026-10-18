@@ -41,6 +41,34 @@ class AccountsAuthenticationTests(APITestCase):
         self.assertEqual(response.data["user"]["role"], "PATIENT")
         self.assertTrue(User.objects.filter(username="john").exists())
 
+    def test_user_registration_rejects_privileged_role(self):
+        escalation_data = self.user_data.copy()
+        escalation_data["username"] = "attacker"
+        escalation_data["email"] = "attacker@example.com"
+        escalation_data["role"] = "SUPER_ADMIN"
+        response = self.client.post(self.register_url, escalation_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("role", response.data)
+
+        # Test doctor privilege escalation attempt
+        escalation_data["username"] = "fake_doctor"
+        escalation_data["email"] = "fake_doctor@example.com"
+        escalation_data["role"] = "DOCTOR"
+        response = self.client.post(self.register_url, escalation_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("role", response.data)
+
+    def test_user_registration_defaults_to_patient_when_role_omitted(self):
+        omitted_data = self.user_data.copy()
+        omitted_data["username"] = "no_role_user"
+        omitted_data["email"] = "norole@example.com"
+        omitted_data.pop("role")
+        response = self.client.post(self.register_url, omitted_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["user"]["role"], "PATIENT")
+        user = User.objects.get(username="no_role_user")
+        self.assertEqual(user.role, "PATIENT")
+
     def test_user_registration_password_mismatch(self):
         invalid_data = self.user_data.copy()
         invalid_data["password_confirm"] = "DifferentPassword123"

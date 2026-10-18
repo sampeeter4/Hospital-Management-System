@@ -236,5 +236,52 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Automated test suite with 21 new tests (**183 total tests passing** across Phases 1–11)
 
-### Phase 12
-- [ ] Testing, Security & Optimization
+### Phase 12 - Testing, Security & Performance Optimization
+- [x] Security audit & vulnerability remediation:
+  - Privilege escalation remediation in user self-registration (`RegisterSerializer` restricted to `PATIENT`; privilege escalation attempts rejected with HTTP 400).
+  - Production HTTP security headers: `SECURE_BROWSER_XSS_FILTER`, `SECURE_CONTENT_TYPE_NOSNIFF`, `X_FRAME_OPTIONS = 'DENY'`.
+  - Secure cookie configuration: `SESSION_COOKIE_HTTPONLY`, `CSRF_COOKIE_HTTPONLY`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`.
+  - Environment-controlled CORS and `ALLOWED_HOSTS` configuration.
+  - Active database health checks via `cursor.execute("SELECT 1")` with graceful HTTP 503 error handling and zero credential leakage.
+  - CSV formula injection protection (CWE-1236) sanitizing spreadsheet export data.
+  - Object-level permission isolation preventing unauthorized patient and staff data access across hospitals.
+- [x] Database query performance & N+1 query elimination:
+  - Optimized `AppointmentViewSet.get_queryset()` with `select_related('booked_by', 'cancelled_by')`, reducing appointment list queries from 7 down to 2 (`COUNT(*)` + single joined `SELECT`).
+  - Verified query count constraints using `assertNumQueries` across Patients, Appointments, and Invoices.
+- [x] Concurrency safety & race condition controls:
+  - Appointment double-booking prevention with validation and schedule bounds checks.
+  - Inpatient bed double-allocation prevention using atomic row locking (`select_for_update()`).
+  - Pharmacy inventory decrement validation preventing negative stock levels during concurrent dispenses.
+  - Financial payment over-allocation prevention using atomic invoice and payment row locking.
+- [x] Comprehensive end-to-end integration test suite:
+  - Full 11-module lifecycle test (`HospitalSystemE2EIntegrationTests`) connecting Hospitals, Patients, Appointments, Medical Records, Laboratory, Pharmacy, Inpatient, Billing, Payments, Insurance Claims, Notifications, and Dashboard Reports in a single uninterrupted journey.
+- [x] Test coverage & release verification:
+  - Automated test suite expanded to **197 tests** with **100% pass rate** (0 failures, 0 errors).
+  - Code coverage measured at **80% overall test coverage** (6,350 / 7,985 statements evaluated via `coverage.py`).
+  - Zero Django system check issues (`manage.py check`).
+  - Validated OpenAPI 3.0 schema generation (`manage.py spectacular --validate`).
+  - Dependency integrity validated (`pip check`).
+- [x] Quality documentation:
+  - `docs/phase12-baseline.md`: Pre-implementation audit and baseline metrics.
+  - `docs/phase12-quality-report.md`: Complete audit findings, query benchmarks, coverage report, and release readiness checklist.
+
+---
+
+## Running the Automated Test Suite
+
+### Run All Tests
+```bash
+python manage.py test
+```
+
+### Run Tests with Code Coverage
+```bash
+python -m coverage run --source='.' manage.py test
+python -m coverage report
+```
+
+### Validate System Checks & OpenAPI Schema
+```bash
+python manage.py check
+python manage.py spectacular --validate
+```

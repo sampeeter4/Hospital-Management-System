@@ -16,6 +16,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
+    role = serializers.CharField(
+        required=False,
+        default=User.Role.PATIENT,
+    )
+
     class Meta:
         model = User
         fields = [
@@ -27,6 +32,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             "role",
         ]
 
+    def validate_role(self, value):
+        if value and value != User.Role.PATIENT:
+            raise serializers.ValidationError(
+                "Self-registration is only allowed for the PATIENT role. Staff and administrator accounts must be provisioned by an administrator."
+            )
+        return value or User.Role.PATIENT
+
     def validate(self, data):
         if data["password"] != data["password_confirm"]:
             raise serializers.ValidationError({
@@ -37,6 +49,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop("password_confirm")
         password = validated_data.pop("password")
+        if "role" not in validated_data or not validated_data["role"]:
+            validated_data["role"] = User.Role.PATIENT
         user = User.objects.create_user(
             password=password,
             **validated_data

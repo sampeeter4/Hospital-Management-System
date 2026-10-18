@@ -66,6 +66,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         "doctor__user",
         "hospital",
         "department",
+        "booked_by",
+        "cancelled_by",
     ).all()
     serializer_class = AppointmentSerializer
     permission_classes = [AppointmentPermission]
@@ -103,6 +105,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             "doctor__user",
             "hospital",
             "department",
+            "booked_by",
+            "cancelled_by",
         ).all()
 
         if user.role == "PATIENT":
