@@ -31,6 +31,9 @@ urlpatterns = [
     # Hospitals & Organization Structure
     path("api/v1/", include("hospitals.urls")),
 
+    # Patients Management
+    path("api/v1/", include("patients.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

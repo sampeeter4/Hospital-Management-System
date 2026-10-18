@@ -16,3 +16,4 @@ router.register("doctors", DoctorViewSet, basename="doctor")
 router.register("staff", StaffViewSet, basename="staff")
 
 urlpatterns = router.urls
+
