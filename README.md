@@ -202,5 +202,39 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Comprehensive automated test suite with 17 new tests (**162 total tests passing** across Phases 1–10)
 
-### Phase 11
-- [ ] Notifications & Alerts Management
+### Phase 11 - Notifications & Reports
+- [x] `notifications` and `reports` apps created and configured in `INSTALLED_APPS` and `urls.py`
+- [x] `Notification` model with channels (IN_APP, EMAIL, SMS), categories (APPOINTMENT, ADMISSION, DISCHARGE, PRESCRIPTION, LABORATORY, BILLING, PAYMENT, INSURANCE, SYSTEM, REMINDER), priorities (LOW, NORMAL, HIGH, URGENT), read/unread status, and duplicate event prevention (`event_key`)
+- [x] `NotificationPreference` model with user-controlled in-app and email toggles, category filtering, and mandatory system notification enforcement
+- [x] `DeliveryAttempt` model with delivery states (`QUEUED`, `SENT`, `FAILED`, `RETRYING`), exponential retry backoff, error classifications, and provider reference logging
+- [x] Reusable notification event service: `send_notification`, `notify_appointment_event`, `notify_admission_event`, `notify_prescription_event`, `notify_lab_result_event`, `notify_billing_event`
+- [x] Safe email delivery service using Django's email backend with environment configuration
+- [x] Automated appointment reminder service (`send_appointment_reminders`) scanning upcoming appointments, filtering out cancelled/completed bookings, and preventing duplicate reminders
+- [x] Background processing management commands: `process_notification_queue` and `send_appointment_reminders`
+- [x] `ReportAuditLog` append-only immutable audit trail recording access to dashboards, operational reports, and CSV exports
+- [x] Role-customized Dashboard API (`/api/v1/reports/dashboard/`):
+  - Doctors: today/upcoming appointments, assigned inpatients, clinical encounters
+  - Nurses: ward capacity, occupied/available beds, occupancy rate, active admissions
+  - Accountants: total invoiced, total collected, net collected, balance due, claims summary
+  - Pharmacists: total medicines, low stock alerts, inventory valuation, dispenses
+  - Lab Technicians: test volumes, verified results, critical alert notifications
+  - Receptionists: new registrations, check-in queue, admissions requested
+  - Super Admin & Hospital Admin: holistic hospital-wide operational and financial dashboard
+  - Patients: explicitly forbidden (403) from general hospital dashboards
+- [x] Operational report endpoints with date range filtering and aggregate calculations:
+  - Patients: `GET /api/v1/reports/patients/`
+  - Appointments: `GET /api/v1/reports/appointments/`
+  - Inpatient: `GET /api/v1/reports/inpatient/`
+  - Pharmacy: `GET /api/v1/reports/pharmacy/`
+  - Laboratory: `GET /api/v1/reports/laboratory/`
+  - Billing: `GET /api/v1/reports/billing/`
+  - Insurance: `GET /api/v1/reports/insurance/`
+  - Audit Logs: `GET /api/v1/reports/audit-logs/`
+- [x] Secure CSV exports with spreadsheet formula injection protection (CWE-1236) and bounded row streaming limits
+- [x] Cross-hospital data leakage prevention and least-privilege role permissions
+- [x] Django Admin registration for notifications, preferences, delivery attempts, and report audit logs
+- [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
+- [x] Automated test suite with 21 new tests (**183 total tests passing** across Phases 1–11)
+
+### Phase 12
+- [ ] Testing, Security & Optimization

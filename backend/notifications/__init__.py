@@ -1,0 +1,4 @@
+"""
+Notifications application package.
+"""
+

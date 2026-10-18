@@ -52,6 +52,12 @@ urlpatterns = [
     # Billing, Payments & Insurance Management
     path("api/v1/billing/", include("billing.urls")),
 
+    # Notifications & Alerts
+    path("api/v1/notifications/", include("notifications.urls")),
+
+    # Reports & Dashboards
+    path("api/v1/reports/", include("reports.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 
