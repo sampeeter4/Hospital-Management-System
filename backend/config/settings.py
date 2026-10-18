@@ -161,6 +161,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication Backends
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=DEBUG)
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])

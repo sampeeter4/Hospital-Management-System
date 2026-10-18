@@ -12,6 +12,7 @@ import {
   FileText,
 } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
+import { useAuth } from '../../hooks/useAuth'
 
 // Isolated Phase 1 Demo Statistics (To be connected to /api/v1/reports/dashboard/ in later phase)
 const DEMO_METRICS = [
@@ -134,14 +135,23 @@ const DEMO_ACTIVITIES = [
 ]
 
 export const DashboardPage: React.FC = () => {
+  const { user, role } = useAuth()
+
+  const staffName =
+    user?.first_name && user?.last_name
+      ? `${user.first_name} ${user.last_name}`
+      : user?.username || 'Staff Member'
+
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Hospital Dashboard</h1>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+            Welcome back, {staffName}
+          </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Real-time operational summary • MetroCare General Hospital
+            Role: <span className="font-semibold text-slate-700">{role || 'User'}</span> • MetroCare General Hospital Operational Portal
           </p>
         </div>
 

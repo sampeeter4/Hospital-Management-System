@@ -87,6 +87,17 @@ class AccountsAuthenticationTests(APITestCase):
         self.assertIn("access", response.data)
         self.assertIn("refresh", response.data)
 
+    def test_jwt_login_with_email_success(self):
+        self.client.post(self.register_url, self.user_data)
+        login_payload = {
+            "username": "john@example.com",
+            "password": "StrongPassword123",
+        }
+        response = self.client.post(self.login_url, login_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
+
     def test_jwt_login_invalid_credentials(self):
         self.client.post(self.register_url, self.user_data)
         login_payload = {

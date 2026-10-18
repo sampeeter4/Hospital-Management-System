@@ -2,16 +2,18 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Eye, EyeOff, Lock, Mail, AlertCircle, Clock } from 'lucide-react'
+import axios from 'axios'
 import { Button, Input } from '../../components/ui'
+import { useAuth } from '../../hooks/useAuth'
 
 // Zod Schema for Login Validation
 const loginSchema = z.object({
-  email: z
+  username: z
     .string()
-    .min(1, 'Email address is required')
-    .email('Please enter a valid email address'),
+    .min(1, 'Email or username is required')
+    .min(3, 'Username must be at least 3 characters'),
   password: z
     .string()
     .min(1, 'Password is required')
@@ -23,9 +25,15 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const { login } = useAuth()
+
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [demoNotice, setDemoNotice] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const isSessionExpired = searchParams.get('expired') === '1'
+  const redirectTarget = searchParams.get('redirect') || '/dashboard'
 
   const {
     register,
@@ -34,25 +42,50 @@ export const LoginPage: React.FC = () => {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
       rememberMe: false,
     },
   })
 
-  const onSubmit = async (_data: LoginFormValues) => {
+  const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true)
-    setDemoNotice(null)
+    setErrorMessage(null)
 
-    // Phase 1 Foundation: Validate form and demonstrate workflow transition
-    // Full JWT integration with backend DRF token endpoints will be connected in Phase 2
-    setTimeout(() => {
+    try {
+      // Connect to real Django JWT login endpoint via AuthContext
+      await login({
+        username: data.username.trim(),
+        password: data.password,
+      })
+
+      // Navigate to destination on success
+      navigate(redirectTarget, { replace: true })
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (!err.response) {
+          setErrorMessage(
+            'Cannot reach the hospital backend server. Please verify network connectivity.'
+          )
+        } else if (err.response.status === 401) {
+          setErrorMessage(
+            'Invalid username/email or password. Please verify your credentials and try again.'
+          )
+        } else if (err.response.status === 400) {
+          setErrorMessage('Please provide both username/email and password.')
+        } else if (err.response.status >= 500) {
+          setErrorMessage(
+            'The hospital authentication service encountered an error. Please contact IT support.'
+          )
+        } else {
+          setErrorMessage('Authentication failed. Please check your credentials.')
+        }
+      } else {
+        setErrorMessage('An unexpected error occurred during sign in.')
+      }
+    } finally {
       setIsSubmitting(false)
-      setDemoNotice('Form validation successful. Navigating to Dashboard...')
-      setTimeout(() => {
-        navigate('/dashboard')
-      }, 700)
-    }, 600)
+    }
   }
 
   return (
@@ -64,29 +97,46 @@ export const LoginPage: React.FC = () => {
         </p>
       </div>
 
-      {demoNotice && (
+      {/* Session Expired Notice */}
+      {isSessionExpired && (
         <div
           role="status"
-          className="mb-5 p-3 rounded-md bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2"
+          className="mb-5 p-3 rounded-md bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-2"
         >
-          <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-          <span>{demoNotice}</span>
+          <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+          <span>Your session has expired. Please sign in again to continue.</span>
+        </div>
+      )}
+
+      {/* Backend Error Alert */}
+      {errorMessage && (
+        <div
+          role="alert"
+          className="mb-5 p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5"
+        >
+          <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <span className="font-semibold block">Authentication Failed</span>
+            <span className="text-[11px] text-rose-700 leading-relaxed block mt-0.5">
+              {errorMessage}
+            </span>
+          </div>
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {/* Email Field */}
+        {/* Username / Email Field */}
         <div>
           <Input
-            id="email"
-            type="email"
-            label="Email Address"
+            id="username"
+            type="text"
+            label="Email or Username"
             required
-            autoComplete="email"
-            placeholder="doctor@hospital.org"
+            autoComplete="username"
+            placeholder="doctor@hospital.org or dr_sharma"
             leftIcon={<Mail className="w-4 h-4" />}
-            error={errors.email?.message}
-            {...register('email')}
+            error={errors.username?.message}
+            {...register('username')}
           />
         </div>
 
@@ -115,7 +165,7 @@ export const LoginPage: React.FC = () => {
           />
         </div>
 
-        {/* Remember Me & Forgot Password */}
+        {/* Remember Me & Help Links */}
         <div className="flex items-center justify-between pt-1">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -130,7 +180,9 @@ export const LoginPage: React.FC = () => {
             href="#forgot-password"
             onClick={(e) => {
               e.preventDefault()
-              alert('Password reset link will be emailed to your registered staff address.')
+              alert(
+                'Password reset requests should be directed to the Hospital Systems Administrator.'
+              )
             }}
             className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
           >
@@ -151,12 +203,13 @@ export const LoginPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Phase 1 Notice Box */}
-        <div className="mt-4 p-3 rounded-md bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-          <p>
-            <strong>Phase 1 Note:</strong> Client-side form validation active via React Hook Form & Zod. Full backend JWT authentication will connect in Frontend Phase 2.
-          </p>
+        {/* Role Demo Tip */}
+        <div className="mt-4 p-3 rounded-md bg-slate-50 border border-slate-200 text-[11px] text-slate-500">
+          <span className="font-semibold text-slate-700 block mb-1">Configured Staff Credentials:</span>
+          <div className="space-y-0.5">
+            <div>• Doctor: <code className="text-slate-800">doctor@hospital.org</code> / <code className="text-slate-800">DoctorPassword123</code></div>
+            <div>• Admin: <code className="text-slate-800">admin@hospital.com</code> / <code className="text-slate-800">AdminPassword123</code></div>
+          </div>
         </div>
       </form>
     </div>
@@ -164,4 +217,3 @@ export const LoginPage: React.FC = () => {
 }
 
 export default LoginPage
-
