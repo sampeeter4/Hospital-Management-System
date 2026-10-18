@@ -49,6 +49,9 @@ urlpatterns = [
     # Hospital Admissions, Beds & Wards Management
     path("api/v1/inpatient/", include("inpatient.urls")),
 
+    # Billing, Payments & Insurance Management
+    path("api/v1/billing/", include("billing.urls")),
+
     # Common & Health Check
     path("api/v1/", include("common.urls")),
 

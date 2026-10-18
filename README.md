@@ -173,5 +173,34 @@ A full-stack hospital management platform built using Django REST Framework, Pos
 - [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
 - [x] Automated test suite with 16 new tests (**145 total tests passing** across Phases 1–9)
 
-### Phase 10
-- [ ] Billing, Payments & Insurance Claims Management
+### Phase 10 - Billing, Payments & Insurance Management
+- [x] `billing` app created and configured in `INSTALLED_APPS` and `urls.py`
+- [x] `ServiceItem` model (service codes, name, category, hospital-scoped pricing, tax rate, active status, unique constraint per hospital)
+- [x] `Invoice` model with auto-generated references (`INV-YYYYMMDD-XXXXXX`), relationship to Patient, Hospital, Admission, Appointment, and Encounter, status lifecycle (`DRAFT`, `ISSUED`, `PARTIALLY_PAID`, `PAID`, `OVERDUE`, `VOID`), and balance due tracking
+- [x] `InvoiceLineItem` model capturing immutable pricing snapshots, quantity, unit price, discounts, tax rates, calculated subtotals, line totals, and clinical module origin tracking
+- [x] Automated bill generation services: `generate_invoice_from_appointment`, `generate_invoice_from_admission`, with duplicate invoice prevention
+- [x] `Payment` model with auto-generated references (`PAY-YYYYMMDD-XXXXXX`), payment methods (CASH, CARD, UPI, BANK_TRANSFER, CHEQUE, INSURANCE, OTHER), client idempotency key enforcement, and payment receipts
+- [x] `PaymentAllocation` model supporting partial payments, multi-invoice allocations, and allocation reversals
+- [x] `Refund` model with references (`REF-YYYYMMDD-XXXXXX`), validation preventing refund exceeding payment, and execution lifecycle
+- [x] `CreditNote` model with references (`CN-YYYYMMDD-XXXXXX`) for billing error corrections and balance reductions
+- [x] `InsuranceProvider`, `PatientInsurancePolicy`, and `InsurancePreAuthorization` models supporting pre-auth approvals, partial approvals, and validity windows
+- [x] `InsuranceClaim` model with references (`CLM-YYYYMMDD-XXXXXX`), adjudication decisions, and settlement payment recording cleanly separating insurance payments from patient responsibility
+- [x] `BillingAuditLog` immutable append-only audit trail capturing financial transactions, voids, refunds, allocations, claims, and decisions
+- [x] Reporting and analytics endpoints: `/api/v1/billing/reports/summary/`, `/api/v1/billing/reports/outstanding/`, and `/api/v1/billing/reports/collections/`
+- [x] Specialized REST endpoints:
+  - Service Items: `GET/POST /api/v1/billing/service-items/`, `GET/PATCH /api/v1/billing/service-items/{id}/`
+  - Invoices: `GET/POST /api/v1/billing/invoices/`, `GET/PATCH /api/v1/billing/invoices/{id}/`, `POST /api/v1/billing/invoices/{id}/issue/`, `POST /api/v1/billing/invoices/{id}/void/`, `GET /api/v1/billing/invoices/{id}/receipt/`
+  - Payments: `GET/POST /api/v1/billing/payments/`, `GET /api/v1/billing/payments/{id}/`, `POST /api/v1/billing/payments/{id}/reverse/`
+  - Refunds: `GET/POST /api/v1/billing/refunds/`, `GET /api/v1/billing/refunds/{id}/`, `POST /api/v1/billing/refunds/{id}/approve/`, `POST /api/v1/billing/refunds/{id}/execute/`
+  - Credit Notes: `GET/POST /api/v1/billing/credit-notes/`, `GET /api/v1/billing/credit-notes/{id}/`
+  - Insurance Providers & Policies: `GET/POST /api/v1/billing/insurance-providers/`, `GET/POST /api/v1/billing/insurance-policies/`
+  - Pre-Authorizations: `GET/POST /api/v1/billing/pre-authorizations/`, `POST /api/v1/billing/pre-authorizations/{id}/record-decision/`
+  - Claims: `GET/POST /api/v1/billing/claims/`, `POST /api/v1/billing/claims/{id}/submit/`, `POST /api/v1/billing/claims/{id}/record-decision/`, `POST /api/v1/billing/claims/{id}/record-payment/`
+  - Audit Logs: `GET /api/v1/billing/audit-logs/`
+- [x] Role-based access control (RBAC): Accountants & Billing Admins (full financial CRUD, voids, refunds, credit notes, reports), Receptionists/Cashiers (record payments), Patients (own invoices, receipts, and claims only; cannot view others or void invoices), Clinical staff restricted according to least-privilege principles
+- [x] Django Admin registration with tabular inlines for invoice lines and payment allocations
+- [x] OpenAPI/Swagger documentation with drf-spectacular (0 errors/warnings)
+- [x] Comprehensive automated test suite with 17 new tests (**162 total tests passing** across Phases 1–10)
+
+### Phase 11
+- [ ] Notifications & Alerts Management
