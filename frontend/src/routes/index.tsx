@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  Users,
   Calendar,
   FileText,
   Pill,
@@ -43,6 +42,12 @@ import StaffListPage from '../pages/staff/StaffListPage'
 import StaffDetailsPage from '../pages/staff/StaffDetailsPage'
 import StaffCreatePage from '../pages/staff/StaffCreatePage'
 import StaffEditPage from '../pages/staff/StaffEditPage'
+
+// Phase 5: Patient Management Pages
+import PatientListPage from '../pages/patients/PatientListPage'
+import PatientDetailsPage from '../pages/patients/PatientDetailsPage'
+import PatientCreatePage from '../pages/patients/PatientCreatePage'
+import PatientEditPage from '../pages/patients/PatientEditPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -259,7 +264,7 @@ export const router = createBrowserRouter([
             ),
           },
 
-          // Placeholders for Later Phases (5–12)
+          // Phase 5: Patient Management
           {
             path: '/patients',
             element: (
@@ -272,12 +277,53 @@ export const router = createBrowserRouter([
                   ROLES.RECEPTIONIST,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Patient Management"
-                  phaseNumber={5}
-                  description="Complete patient registration, demographic directory, outpatient files, MRN search, and medical histories."
-                  icon={Users}
-                />
+                <PatientListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/patients/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <PatientCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/patients/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <PatientDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/patients/:id/edit',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <PatientEditPage />
               </RoleRoute>
             ),
           },

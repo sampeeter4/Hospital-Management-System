@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface PaginationProps {
   currentPage: number
-  totalPages: number
+  totalPages?: number
   totalItems: number
   pageSize: number
   onPageChange: (page: number) => void
@@ -12,12 +12,13 @@ interface PaginationProps {
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
-  totalPages,
+  totalPages: propTotalPages,
   totalItems,
   pageSize,
   onPageChange,
   className = '',
 }) => {
+  const totalPages = propTotalPages ?? Math.max(1, Math.ceil(totalItems / pageSize))
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1
   const endItem = Math.min(currentPage * pageSize, totalItems)
 
@@ -67,3 +68,4 @@ export const Pagination: React.FC<PaginationProps> = ({
 }
 
 export default Pagination
+

@@ -289,3 +289,4 @@ export const HospitalDetailsPage: React.FC = () => {
 }
 
 export default HospitalDetailsPage
+

@@ -310,3 +310,4 @@ export const HospitalEditPage: React.FC = () => {
 }
 
 export default HospitalEditPage
+

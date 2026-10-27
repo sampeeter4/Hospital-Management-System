@@ -267,3 +267,4 @@ export const DepartmentListPage: React.FC = () => {
 }
 
 export default DepartmentListPage
+

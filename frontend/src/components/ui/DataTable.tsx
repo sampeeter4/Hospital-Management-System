@@ -3,7 +3,8 @@ import { Inbox } from 'lucide-react'
 
 export interface Column<T> {
   key: string
-  header: string
+  header?: string
+  title?: string
   render?: (item: T) => ReactNode
   className?: string
   align?: 'left' | 'center' | 'right'
@@ -16,6 +17,7 @@ interface DataTableProps<T> {
   isLoading?: boolean
   emptyMessage?: string
   emptyTitle?: string
+  emptyState?: ReactNode
   className?: string
 }
 
@@ -26,6 +28,7 @@ export function DataTable<T>({
   isLoading = false,
   emptyMessage = 'No records found matching your filters.',
   emptyTitle = 'No Records',
+  emptyState,
   className = '',
 }: DataTableProps<T>) {
   if (isLoading) {
@@ -42,6 +45,13 @@ export function DataTable<T>({
   }
 
   if (data.length === 0) {
+    if (emptyState) {
+      return (
+        <div className={`bg-white border border-slate-200 rounded-lg p-6 shadow-2xs ${className}`}>
+          {emptyState}
+        </div>
+      )
+    }
     return (
       <div className="bg-white border border-slate-200 rounded-lg p-10 text-center">
         <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mx-auto mb-3">
@@ -70,7 +80,7 @@ export function DataTable<T>({
                       : 'text-left'
                   } ${col.className || ''}`}
                 >
-                  {col.header}
+                  {col.header || col.title || ''}
                 </th>
               ))}
             </tr>

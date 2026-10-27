@@ -115,3 +115,4 @@ export const hospitalApi = {
 }
 
 export default hospitalApi
+
