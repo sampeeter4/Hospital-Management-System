@@ -8,7 +8,6 @@ import {
   Bed,
   CreditCard,
   BarChart3,
-  ShieldCheck,
 } from 'lucide-react'
 
 import AuthLayout from '../layouts/AuthLayout'
@@ -22,6 +21,28 @@ import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoute'
 import RoleRoute from './RoleRoute'
 import { ROLES } from '../constants/roles'
+
+// Phase 4: Organization & Staff Management Pages
+import AdminHubPage from '../pages/administration/AdminHubPage'
+import HospitalListPage from '../pages/hospitals/HospitalListPage'
+import HospitalDetailsPage from '../pages/hospitals/HospitalDetailsPage'
+import HospitalCreatePage from '../pages/hospitals/HospitalCreatePage'
+import HospitalEditPage from '../pages/hospitals/HospitalEditPage'
+
+import DepartmentListPage from '../pages/departments/DepartmentListPage'
+import DepartmentDetailsPage from '../pages/departments/DepartmentDetailsPage'
+import DepartmentCreatePage from '../pages/departments/DepartmentCreatePage'
+import DepartmentEditPage from '../pages/departments/DepartmentEditPage'
+
+import DoctorListPage from '../pages/doctors/DoctorListPage'
+import DoctorDetailsPage from '../pages/doctors/DoctorDetailsPage'
+import DoctorCreatePage from '../pages/doctors/DoctorCreatePage'
+import DoctorEditPage from '../pages/doctors/DoctorEditPage'
+
+import StaffListPage from '../pages/staff/StaffListPage'
+import StaffDetailsPage from '../pages/staff/StaffDetailsPage'
+import StaffCreatePage from '../pages/staff/StaffCreatePage'
+import StaffEditPage from '../pages/staff/StaffEditPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -60,7 +81,185 @@ export const router = createBrowserRouter([
             element: <NotFoundPage />,
           },
 
-          // Role-Guarded Hospital Module Routes (Placeholders until dedicated phase)
+          // Phase 4: Administration Hub
+          {
+            path: '/admin',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <AdminHubPage />
+              </RoleRoute>
+            ),
+          },
+
+          // Phase 4: Hospitals Module
+          {
+            path: '/hospitals',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <HospitalListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/hospitals/new',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <HospitalCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/hospitals/:id',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <HospitalDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/hospitals/:id/edit',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <HospitalEditPage />
+              </RoleRoute>
+            ),
+          },
+
+          // Phase 4: Departments Module
+          {
+            path: '/departments',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <DepartmentListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/departments/new',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <DepartmentCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/departments/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <DepartmentDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/departments/:id/edit',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <DepartmentEditPage />
+              </RoleRoute>
+            ),
+          },
+
+          // Phase 4: Doctors Module
+          {
+            path: '/doctors',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <DoctorListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/doctors/new',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <DoctorCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/doctors/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <DoctorDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/doctors/:id/edit',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <DoctorEditPage />
+              </RoleRoute>
+            ),
+          },
+
+          // Phase 4: Staff Module
+          {
+            path: '/staff',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <StaffListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/staff/new',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <StaffCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/staff/:id',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <StaffDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/staff/:id/edit',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <StaffEditPage />
+              </RoleRoute>
+            ),
+          },
+
+          // Placeholders for Later Phases (5–12)
           {
             path: '/patients',
             element: (
@@ -222,19 +421,6 @@ export const router = createBrowserRouter([
                   phaseNumber={12}
                   description="Hospital operational metrics, clinical census reports, financial aggregates, CSV exports, and audit trails."
                   icon={BarChart3}
-                />
-              </RoleRoute>
-            ),
-          },
-          {
-            path: '/admin',
-            element: (
-              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
-                <ModulePlaceholder
-                  title="Hospital & Staff Administration"
-                  phaseNumber={4}
-                  description="Hospital configuration, departmental organization, doctor profiles, staff roles, and system audit logs."
-                  icon={ShieldCheck}
                 />
               </RoleRoute>
             ),

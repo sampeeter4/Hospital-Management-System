@@ -74,3 +74,4 @@ export const AppointmentSummary: React.FC<AppointmentSummaryProps> = ({
 }
 
 export default AppointmentSummary
+

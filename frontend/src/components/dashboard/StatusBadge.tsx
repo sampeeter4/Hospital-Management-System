@@ -78,3 +78,4 @@ function formatStatusText(status: string): string {
 }
 
 export default StatusBadge
+

@@ -146,3 +146,4 @@ export interface NotificationItem {
   is_read: boolean
   created_at: string
 }
+

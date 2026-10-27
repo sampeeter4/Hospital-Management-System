@@ -47,3 +47,4 @@ export const EmptyDashboardState: React.FC<EmptyDashboardStateProps> = ({
 }
 
 export default EmptyDashboardState
+

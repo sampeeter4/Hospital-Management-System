@@ -129,3 +129,41 @@ The application strictly enforces the 9 roles defined in the backend:
 - Staff roles query the backend `/api/v1/reports/dashboard/` endpoint via `useDashboardData()` which provides optimized role-tailored database aggregates (`workload`, `inpatient_overview`, `financial_summary`, `pharmacy_summary`, `laboratory_summary`, `reception_summary`, etc.).
 - `DashboardPage` dispatches to the matching dedicated dashboard component (`SuperAdminDashboard`, `HospitalAdminDashboard`, `DoctorDashboard`, `NurseDashboard`, `ReceptionistDashboard`, `LabTechnicianDashboard`, `PharmacistDashboard`, `AccountantDashboard`, or `PatientDashboard`).
 - Patients bypass staff report endpoints and render the simplified patient portal view.
+
+
+---
+
+## Frontend Phase 4: Hospital, Department & Staff Management
+
+Frontend Phase 4 establishes the organizational hierarchy and personnel management interface, fully integrated with Django REST Framework endpoints (`/api/v1/hospitals/`, `/api/v1/departments/`, `/api/v1/doctors/`, `/api/v1/staff/`, `/api/v1/accounts/users/`).
+
+### Implemented Modules & Features
+1. **Hospital Management (`/hospitals`)**:
+   - Hospital directory listing with registration number, contact, location, and operational status.
+   - Comprehensive detail page with associated departments preview.
+   - Registration form with validation via React Hook Form and Zod.
+   - Hospital edit page and safe activation/deactivation confirmation dialog.
+2. **Department Management (`/departments`)**:
+   - Clinical specialties and ward units list with hospital facility filter.
+   - Department code, floor location, phone extension, and active doctors preview.
+   - Creation and editing workflows with facility assignment.
+3. **Doctor Directory (`/doctors`)**:
+   - Physician roster with medical license numbers, qualifications, clinical specializations, consultation fees, and experience years.
+   - Outpatient consultation availability toggle (`AVAILABLE` / `OFFLINE`).
+   - Profile view with full biography and department linkage.
+4. **Staff Management (`/staff`)**:
+   - Personnel directory covering nurses, receptionists, lab technicians, pharmacists, and accountants.
+   - Employee identification numbers, official designations, department assignments, and date of joining.
+   - Staff creation, edit, and activation/deactivation.
+5. **Administration Hub (`/admin`)**:
+   - Central command dashboard providing aggregate statistics and direct quick actions to all organizational modules.
+
+### Reusable UI Components Added (`src/components/ui/`)
+- `DataTable`: Responsive, accessible tabular grid with column renderers and sorting headers.
+- `SearchInput`: Search bar with clear button.
+- `FilterBar`: Responsive filter container for multi-criteria list filtering.
+- `Pagination`: Accessible page navigation with range indicators.
+- `ConfirmDialog`: Safe modal dialog for sensitive state transitions (activation/deactivation/delete).
+- `PageHeader`: Standardized page title header with breadcrumbs and action buttons.
+- `FormSection`: Structured form section cards with subtitles and clean input layout.
+- `DetailField`: Label-value display pair for detail screens.

@@ -56,3 +56,4 @@ export const ActivityList: React.FC<ActivityListProps> = ({
 }
 
 export default ActivityList
+

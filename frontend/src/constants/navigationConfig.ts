@@ -10,6 +10,10 @@ import {
   CreditCard,
   BarChart3,
   ShieldCheck,
+  Building2,
+  Layers,
+  Stethoscope,
+  UserCheck,
 } from 'lucide-react'
 import { ROLES, UserRole } from './roles'
 
@@ -27,6 +31,42 @@ export const NAVIGATION_CONFIG: NavigationItem[] = [
     href: '/dashboard',
     icon: LayoutDashboard,
     allowedRoles: Object.values(ROLES),
+  },
+  {
+    name: 'Hospitals',
+    href: '/hospitals',
+    icon: Building2,
+    allowedRoles: [ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN],
+  },
+  {
+    name: 'Departments',
+    href: '/departments',
+    icon: Layers,
+    allowedRoles: [
+      ROLES.SUPER_ADMIN,
+      ROLES.HOSPITAL_ADMIN,
+      ROLES.DOCTOR,
+      ROLES.NURSE,
+      ROLES.RECEPTIONIST,
+    ],
+  },
+  {
+    name: 'Doctor Directory',
+    href: '/doctors',
+    icon: Stethoscope,
+    allowedRoles: [
+      ROLES.SUPER_ADMIN,
+      ROLES.HOSPITAL_ADMIN,
+      ROLES.DOCTOR,
+      ROLES.NURSE,
+      ROLES.RECEPTIONIST,
+    ],
+  },
+  {
+    name: 'Staff Management',
+    href: '/staff',
+    icon: UserCheck,
+    allowedRoles: [ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN],
   },
   {
     name: 'Patients',
@@ -122,10 +162,9 @@ export const NAVIGATION_CONFIG: NavigationItem[] = [
     ],
   },
   {
-    name: 'Administration',
+    name: 'Administration Hub',
     href: '/admin',
     icon: ShieldCheck,
     allowedRoles: [ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN],
   },
 ]
-

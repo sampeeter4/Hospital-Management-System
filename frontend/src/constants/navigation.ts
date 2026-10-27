@@ -4,3 +4,4 @@
  */
 export * from './navigationConfig'
 export { NAVIGATION_CONFIG as default } from './navigationConfig'
+

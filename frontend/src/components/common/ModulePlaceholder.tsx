@@ -69,3 +69,4 @@ export const ModulePlaceholder: React.FC<ModulePlaceholderProps> = ({
 }
 
 export default ModulePlaceholder
+

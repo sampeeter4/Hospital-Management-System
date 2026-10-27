@@ -127,3 +127,21 @@ def change_password(request):
         serializer.errors,
         status=status.HTTP_400_BAD_REQUEST,
     )
+
+
+@extend_schema(
+    summary="List users",
+    description="Allows authenticated users to list system user accounts (optional ?role= filter).",
+    responses={200: UserProfileSerializer(many=True)},
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_list(request):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    role = request.query_params.get("role")
+    qs = User.objects.all().order_by("username")
+    if role:
+        qs = qs.filter(role=role)
+    serializer = UserProfileSerializer(qs, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
