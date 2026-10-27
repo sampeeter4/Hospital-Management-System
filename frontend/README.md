@@ -22,18 +22,20 @@ frontend/
 ├── src/
 │   ├── assets/             # Static graphics and icons
 │   ├── components/         # Reusable UI components
-│   │   ├── common/         # Layout navigation (Sidebar, TopNav)
+│   │   ├── common/         # Layout navigation (Sidebar, TopNav, ModulePlaceholder)
+│   │   ├── dashboard/      # Reusable dashboard widgets (StatCard, TaskList, AlertList, etc.)
 │   │   ├── forms/          # Form-specific wrappers
 │   │   └── ui/             # Design system components (Button, Input, Card, Spinner, etc.)
 │   ├── layouts/            # AuthLayout, MainLayout
-│   ├── pages/              # Views (auth, dashboard, errors)
-│   ├── routes/             # Central route definitions
-│   ├── services/           # Axios client and React Query configuration
-│   ├── hooks/              # Reusable React hooks
-│   ├── context/            # React Contexts
-│   ├── types/              # TypeScript definitions
+│   ├── pages/              # Views (auth, role dashboards, errors)
+│   │   └── dashboard/      # Role-specific dashboard components
+│   ├── routes/             # Central route definitions & route guards
+│   ├── services/           # Axios client, Auth API, Dashboard API, QueryClient
+│   ├── hooks/              # Reusable React hooks & React Query data hooks
+│   ├── context/            # React AuthContext
+│   ├── types/              # TypeScript definitions (auth, dashboard, roles)
 │   ├── utils/              # Formatting and helper utilities
-│   ├── constants/          # Roles and API routes
+│   ├── constants/          # Roles, navigation matrix
 │   ├── App.tsx             # Root application provider setup
 │   ├── main.tsx            # Application entry point
 │   └── index.css           # Tailwind CSS imports and font tokens
@@ -79,3 +81,51 @@ npm run build
 ```
 Build output is emitted to `dist/`.
 
+---
+
+## Frontend Phase 3: Main Shell & Role-Based Dashboards
+
+Frontend Phase 3 establishes the professional application shell and role-tailored dashboard workstations for all hospital personnel and patients.
+
+### Supported User Roles
+The application strictly enforces the 9 roles defined in the backend:
+1. `SUPER_ADMIN` — System-wide multi-facility platform supervision.
+2. `HOSPITAL_ADMIN` — Hospital operations, department oversight, and clinical census.
+3. `DOCTOR` — Clinical workstation, OPD consultations, patient EMR review, and prescription orders.
+4. `NURSE` — Ward bed occupancy, vital signs recording rounds, and inpatient monitoring.
+5. `RECEPTIONIST` — Front desk arrivals, OPD check-ins, patient registration, and appointment scheduling.
+6. `LAB_TECHNICIAN` — Diagnostic orders accessioning, specimen processing, and test result entry.
+7. `PHARMACIST` — Formulary stock management, active batch tracking, and prescription dispensing.
+8. `ACCOUNTANT` — Daily billing ledger, payment collections, invoice reconciliation, and insurance claims.
+9. `PATIENT` — Patient portal for consultation appointments, active prescriptions, and billing receipts.
+
+### Main Application Shell
+- **Sidebar (`Sidebar.tsx`)**:
+  - Dynamically filtered using `src/constants/navigationConfig.ts` so users only see routes permitted for their role.
+  - Active navigation indicators with Lucide icons.
+  - Responsive mobile drawer with backdrop overlay.
+  - Integrated Sign Out action and secure connection badge.
+- **Top Navigation (`TopNav.tsx`)**:
+  - Dynamic breadcrumbs based on the active route.
+  - Live unread notification indicator connected to `/api/v1/notifications/unread-count/`.
+  - User profile menu showing authenticated full name, username, email, and formatted role badge.
+- **Module Placeholders (`ModulePlaceholder.tsx`)**:
+  - Dignified hospital-grade placeholders for later phases (e.g., Phase 5 Patients, Phase 6 Appointments) preventing broken routes or fake CRUD screens.
+
+### Reusable Dashboard Components (`src/components/dashboard/`)
+- `DashboardHeader`: Greeting, active user title, hospital facility scope, and formatted date.
+- `StatCard`: Standardized metric card displaying title, value, context, and Lucide icon with restrained styling.
+- `SectionHeader`: Section titles with optional actions and count badges.
+- `QuickActionCard`: Role-authorized action button linking directly to workflows.
+- `AppointmentSummary`: Tabular overview of appointments with patient name, MRN, department, and status.
+- `TaskList`: Shift checklists with priority tags (`HIGH`, `MEDIUM`, `LOW`) and status tracking.
+- `AlertList`: Facility and clinical alerts categorized by severity (`INFO`, `WARNING`, `DANGER`, `URGENT`).
+- `StatusBadge`: Consistent color-coded badges for hospital statuses.
+- `EmptyDashboardState`: Hospital-grade empty state preventing blank or broken screens.
+- `DashboardSkeleton`: Pulse skeleton loader displayed while React Query fetches backend metrics.
+
+### How Role-Based Dashboard Selection Works
+- When an authenticated user visits `/dashboard`, `DashboardPage.tsx` accesses the current authenticated user's role from `useAuth()`.
+- Staff roles query the backend `/api/v1/reports/dashboard/` endpoint via `useDashboardData()` which provides optimized role-tailored database aggregates (`workload`, `inpatient_overview`, `financial_summary`, `pharmacy_summary`, `laboratory_summary`, `reception_summary`, etc.).
+- `DashboardPage` dispatches to the matching dedicated dashboard component (`SuperAdminDashboard`, `HospitalAdminDashboard`, `DoctorDashboard`, `NurseDashboard`, `ReceptionistDashboard`, `LabTechnicianDashboard`, `PharmacistDashboard`, `AccountantDashboard`, or `PatientDashboard`).
+- Patients bypass staff report endpoints and render the simplified patient portal view.

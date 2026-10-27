@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Building2, X } from 'lucide-react'
+import { Building2, X, LogOut } from 'lucide-react'
 import { NAVIGATION_CONFIG } from '../../constants/navigationConfig'
 import { useAuth } from '../../hooks/useAuth'
 import { ROLE_LABELS } from '../../constants/roles'
@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { role } = useAuth()
+  const { role, logout } = useAuth()
 
   // Filter navigation items by authenticated user role
   const visibleNavItems = NAVIGATION_CONFIG.filter(
@@ -20,7 +20,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile backdrop */}
+      {/* Mobile backdrop with accessible overlay */}
       {isOpen && (
         <div
           role="presentation"
@@ -36,9 +36,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           flex flex-col border-r border-slate-800 transition-transform duration-200 ease-in-out
           lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
+        aria-label="Main Hospital Navigation"
       >
         {/* Hospital Branding Header */}
-        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800">
+        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-md bg-blue-600 flex items-center justify-center text-white font-bold shadow-xs">
               <Building2 className="w-5 h-5" aria-hidden="true" />
@@ -51,9 +52,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            aria-label="Close sidebar"
-            className="lg:hidden text-slate-400 hover:text-white p-1 rounded-md"
+            aria-label="Close navigation sidebar"
+            className="lg:hidden text-slate-400 hover:text-white p-1 rounded-md cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -62,10 +64,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Navigation Section */}
         <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
           <div className="px-3 pb-2 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
-            {role ? ROLE_LABELS[role] : 'Clinical & Management'}
+            {role ? ROLE_LABELS[role] : 'Hospital Navigation'}
           </div>
 
-          <nav className="space-y-0.5">
+          <nav className="space-y-0.5" aria-label="Module Navigation Links">
             {visibleNavItems.map((item) => {
               const Icon = item.icon
               return (
@@ -97,13 +99,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </nav>
         </div>
 
-        {/* System Version & Hospital Scope Footer */}
-        <div className="p-3 border-t border-slate-800 bg-slate-950/40 text-[11px] text-slate-400 flex items-center justify-between">
-          <span>v1.0 • Phase 2 Auth</span>
-          <span className="inline-flex items-center gap-1.5 font-medium text-slate-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            Secured
-          </span>
+        {/* Bottom Actions & Sign Out */}
+        <div className="p-3 border-t border-slate-800 space-y-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.innerWidth < 1024) onClose()
+              logout()
+            }}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-rose-400 transition-colors cursor-pointer"
+          >
+            <LogOut className="w-4 h-4 text-slate-500" />
+            <span>Sign Out</span>
+          </button>
+
+          <div className="pt-2 border-t border-slate-850 text-[11px] text-slate-500 flex items-center justify-between px-1">
+            <span>v1.0 • Phase 3 Shell</span>
+            <span className="inline-flex items-center gap-1.5 font-medium text-slate-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Secured
+            </span>
+          </div>
         </div>
       </aside>
     </>

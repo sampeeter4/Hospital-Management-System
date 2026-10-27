@@ -1,10 +1,23 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import {
+  Users,
+  Calendar,
+  FileText,
+  Pill,
+  FlaskConical,
+  Bed,
+  CreditCard,
+  BarChart3,
+  ShieldCheck,
+} from 'lucide-react'
+
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
 import LoginPage from '../pages/auth/LoginPage'
 import DashboardPage from '../pages/dashboard/DashboardPage'
 import NotFoundPage from '../pages/errors/NotFoundPage'
 import ForbiddenPage from '../pages/errors/ForbiddenPage'
+import ModulePlaceholder from '../components/common/ModulePlaceholder'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoute'
 import RoleRoute from './RoleRoute'
@@ -47,7 +60,7 @@ export const router = createBrowserRouter([
             element: <NotFoundPage />,
           },
 
-          // Role-Guarded Hospital Modules
+          // Role-Guarded Hospital Module Routes (Placeholders until dedicated phase)
           {
             path: '/patients',
             element: (
@@ -60,12 +73,12 @@ export const router = createBrowserRouter([
                   ROLES.RECEPTIONIST,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Patients Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Full patient management will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Patient Management"
+                  phaseNumber={5}
+                  description="Complete patient registration, demographic directory, outpatient files, MRN search, and medical histories."
+                  icon={Users}
+                />
               </RoleRoute>
             ),
           },
@@ -82,12 +95,12 @@ export const router = createBrowserRouter([
                   ROLES.PATIENT,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Appointments Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Full scheduling workflows will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Appointments & Scheduling"
+                  phaseNumber={6}
+                  description="Consultation booking slots, doctor calendars, waiting queue management, check-in, and rescheduling."
+                  icon={Calendar}
+                />
               </RoleRoute>
             ),
           },
@@ -102,12 +115,12 @@ export const router = createBrowserRouter([
                   ROLES.NURSE,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Medical Records Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Clinical documentation will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Medical Records & Clinical Documentation"
+                  phaseNumber={7}
+                  description="Electronic medical records (EMR), SOAP clinical encounter notes, diagnostic summaries, and vital sign logs."
+                  icon={FileText}
+                />
               </RoleRoute>
             ),
           },
@@ -122,12 +135,12 @@ export const router = createBrowserRouter([
                   ROLES.DOCTOR,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Pharmacy Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Inventory and dispensing will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Pharmacy & Prescriptions"
+                  phaseNumber={8}
+                  description="Formulary catalog, batch tracking, expiry monitoring, doctor e-prescriptions, and medication dispensing."
+                  icon={Pill}
+                />
               </RoleRoute>
             ),
           },
@@ -142,12 +155,12 @@ export const router = createBrowserRouter([
                   ROLES.DOCTOR,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Laboratory Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Diagnostic orders and results will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Laboratory & Diagnostics"
+                  phaseNumber={9}
+                  description="Pathology & radiology test orders, specimen accessioning, analyte entry, report verification, and critical flags."
+                  icon={FlaskConical}
+                />
               </RoleRoute>
             ),
           },
@@ -163,12 +176,12 @@ export const router = createBrowserRouter([
                   ROLES.RECEPTIONIST,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Inpatient Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Bed allocations and admissions will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Inpatient, Beds & Wards"
+                  phaseNumber={10}
+                  description="Hospital ward census, bed allocations, room occupancy charts, admission orders, rounds, and discharge summaries."
+                  icon={Bed}
+                />
               </RoleRoute>
             ),
           },
@@ -184,12 +197,12 @@ export const router = createBrowserRouter([
                   ROLES.PATIENT,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Billing & Insurance Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Invoices, claims, and receipts will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Billing, Payments & Insurance"
+                  phaseNumber={11}
+                  description="Patient invoicing, receipt generation, multi-mode payment collection, insurance pre-auth, and claims tracking."
+                  icon={CreditCard}
+                />
               </RoleRoute>
             ),
           },
@@ -204,12 +217,12 @@ export const router = createBrowserRouter([
                   ROLES.DOCTOR,
                 ]}
               >
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Reports Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Analytics and dashboards will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Notifications & Reports"
+                  phaseNumber={12}
+                  description="Hospital operational metrics, clinical census reports, financial aggregates, CSV exports, and audit trails."
+                  icon={BarChart3}
+                />
               </RoleRoute>
             ),
           },
@@ -217,12 +230,12 @@ export const router = createBrowserRouter([
             path: '/admin',
             element: (
               <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
-                <div className="p-6 bg-white border border-slate-200 rounded-lg">
-                  <h2 className="text-base font-bold text-slate-900">Administration Module</h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Role-authorized access verified. Hospital settings and user administration will be built in subsequent frontend phases.
-                  </p>
-                </div>
+                <ModulePlaceholder
+                  title="Hospital & Staff Administration"
+                  phaseNumber={4}
+                  description="Hospital configuration, departmental organization, doctor profiles, staff roles, and system audit logs."
+                  icon={ShieldCheck}
+                />
               </RoleRoute>
             ),
           },
@@ -231,7 +244,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Root redirect: Redirect to /dashboard (if authenticated, handled by PublicRoute / ProtectedRoute)
+  // Root redirect: Redirect to /dashboard
   {
     path: '/',
     element: <Navigate to="/dashboard" replace />,

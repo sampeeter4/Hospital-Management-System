@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Menu, Search, Bell, User as UserIcon, LogOut, Shield } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
+import { useNotifications } from '../../hooks/dashboard/useNotifications'
 import { ROLE_LABELS } from '../../constants/roles'
 
 interface TopNavProps {
@@ -10,9 +12,11 @@ interface TopNavProps {
 
 export const TopNav: React.FC<TopNavProps> = ({
   onToggleSidebar,
-  pageTitle = 'Hospital Overview',
+  pageTitle,
 }) => {
+  const location = useLocation()
   const { user, role, logout } = useAuth()
+  const { unreadCount } = useNotifications()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -32,23 +36,29 @@ export const TopNav: React.FC<TopNavProps> = ({
       ? `${user.first_name} ${user.last_name}`
       : user?.username || 'Staff User'
 
+  // Derive breadcrumb & page title dynamically
+  const resolvedPageTitle =
+    pageTitle ||
+    formatPathTitle(location.pathname) ||
+    'Hospital Overview'
+
   return (
     <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
-      {/* Left side: Hamburger button (mobile) & Breadcrumb / Page Title */}
+      {/* Left side: Hamburger button (mobile) & Breadcrumbs */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onToggleSidebar}
-          aria-label="Open sidebar"
+          aria-label="Open sidebar navigation"
           className="lg:hidden text-slate-600 hover:text-slate-900 p-1.5 rounded-md hover:bg-slate-100 cursor-pointer"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 hidden sm:inline">Hospital</span>
+          <span className="text-xs font-medium text-slate-400 hidden sm:inline">Hospital</span>
           <span className="text-xs text-slate-300 hidden sm:inline">/</span>
-          <h1 className="text-sm font-semibold text-slate-900 truncate">{pageTitle}</h1>
+          <h1 className="text-sm font-bold text-slate-900 truncate">{resolvedPageTitle}</h1>
         </div>
       </div>
 
@@ -59,19 +69,33 @@ export const TopNav: React.FC<TopNavProps> = ({
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="search"
-            placeholder="Search patient MRN, doctor, order..."
+            placeholder="Search patient MRN, doctor, test..."
+            aria-label="Search hospital records"
             className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition-colors"
           />
         </div>
 
-        {/* Notifications Icon Placeholder */}
+        {/* Notifications Icon with Real Unread Count Badge */}
         <button
           type="button"
-          aria-label="Notifications"
+          aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
           className="relative text-slate-500 hover:text-slate-700 p-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer"
+          onClick={() => {
+            alert(
+              unreadCount > 0
+                ? `You have ${unreadCount} unread hospital notifications.`
+                : 'No unread notifications at this time.'
+            )
+          }}
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600 ring-2 ring-white" />
+          {unreadCount > 0 ? (
+            <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-blue-600 text-white text-[10px] font-bold">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          ) : (
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+          )}
         </button>
 
         {/* Staff / Profile Menu with dropdown */}
@@ -81,6 +105,7 @@ export const TopNav: React.FC<TopNavProps> = ({
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-expanded={menuOpen}
             aria-haspopup="true"
+            aria-label="User profile menu"
             className="flex items-center gap-2.5 pl-2 border-l border-slate-200 hover:opacity-90 focus:outline-none cursor-pointer"
           >
             <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-semibold text-xs">
@@ -98,13 +123,13 @@ export const TopNav: React.FC<TopNavProps> = ({
 
           {/* Profile Dropdown Menu */}
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-md py-1.5 z-50 text-xs">
+            <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-md py-1.5 z-50 text-xs animate-in fade-in-50 duration-100">
               <div className="px-4 py-2 border-b border-slate-100">
                 <p className="font-semibold text-slate-900 truncate">{displayName}</p>
-                <p className="text-[11px] text-slate-500 truncate mt-0.5">{user?.email || ''}</p>
-                <div className="mt-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 text-[10px] font-semibold border border-blue-100">
+                <p className="text-[11px] text-slate-500 truncate mt-0.5">{user?.email || 'No email configured'}</p>
+                <div className="mt-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-xs bg-blue-50 text-blue-700 text-[10px] font-semibold border border-blue-100">
                   <Shield className="w-3 h-3 text-blue-500" />
-                  <span>{role ? ROLE_LABELS[role] : 'Staff'}</span>
+                  <span>{role ? ROLE_LABELS[role] : 'Hospital Staff'}</span>
                 </div>
               </div>
 
@@ -113,7 +138,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                   type="button"
                   onClick={() => {
                     setMenuOpen(false)
-                    alert(`Signed in as ${user?.username} (${user?.email}) - Role: ${user?.role}`)
+                    alert(`Account Information:\n\nUsername: ${user?.username}\nEmail: ${user?.email || 'N/A'}\nRole: ${user?.role}\nStatus: Active`)
                   }}
                   className="w-full text-left px-4 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
                 >
@@ -141,6 +166,14 @@ export const TopNav: React.FC<TopNavProps> = ({
       </div>
     </header>
   )
+}
+
+function formatPathTitle(pathname: string): string {
+  const segment = pathname.split('/').filter(Boolean)[0]
+  if (!segment) return 'Dashboard'
+  return segment
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 export default TopNav
