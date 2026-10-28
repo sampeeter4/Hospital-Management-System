@@ -81,6 +81,13 @@ import NotificationListPage from '../pages/notifications/NotificationListPage'
 import NotificationPreferencesPage from '../pages/notifications/NotificationPreferencesPage'
 import ReportsHubPage from '../pages/reports/ReportsHubPage'
 
+// Phase 13: Administration, Settings & Audit Logs Pages
+import ProfileSettingsPage from '../pages/settings/ProfileSettingsPage'
+import SecuritySettingsPage from '../pages/settings/SecuritySettingsPage'
+import UserManagementPage from '../pages/administration/UserManagementPage'
+import AuditLogPage from '../pages/administration/AuditLogPage'
+import SystemHealthPage from '../pages/administration/SystemHealthPage'
+
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
   {
@@ -880,6 +887,47 @@ export const router = createBrowserRouter([
                 ]}
               >
                 <NotificationPreferencesPage />
+              </RoleRoute>
+            ),
+          },
+          // Phase 13: Settings & Administration
+          {
+            path: '/settings/profile',
+            element: (
+              <RoleRoute allowedRoles={Object.values(ROLES)}>
+                <ProfileSettingsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/settings/security',
+            element: (
+              <RoleRoute allowedRoles={Object.values(ROLES)}>
+                <SecuritySettingsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/admin/users',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <UserManagementPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/admin/audit-logs',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <AuditLogPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/admin/health',
+            element: (
+              <RoleRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.HOSPITAL_ADMIN]}>
+                <SystemHealthPage />
               </RoleRoute>
             ),
           },

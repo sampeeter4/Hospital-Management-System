@@ -8,11 +8,13 @@ interface PageHeaderProps {
   backTo?: string
   backLabel?: string
   actions?: ReactNode
-  action?: {
-    label: string
-    icon?: ReactNode
-    onClick: () => void | Promise<void>
-  }
+  action?:
+    | {
+        label: string
+        icon?: ReactNode
+        onClick: () => void | Promise<void>
+      }
+    | ReactNode
   children?: ReactNode
   className?: string
 }
@@ -52,14 +54,18 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         <div className="flex items-center gap-2.5 shrink-0">
           {actions}
           {action && (
-            <button
-              type="button"
-              onClick={action.onClick}
-              className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-xs transition-colors"
-            >
-              {action.icon}
-              <span>{action.label}</span>
-            </button>
+            React.isValidElement(action) ? (
+              action
+            ) : (
+              <button
+                type="button"
+                onClick={(action as { onClick: () => void | Promise<void> }).onClick}
+                className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-xs transition-colors"
+              >
+                {(action as { icon?: ReactNode }).icon}
+                <span>{(action as { label: string }).label}</span>
+              </button>
+            )
           )}
           {children}
         </div>

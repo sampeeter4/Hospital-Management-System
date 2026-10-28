@@ -8,6 +8,9 @@ import {
   Users,
   Plus,
   ArrowRight,
+  ShieldCheck,
+  FileCheck2,
+  Activity,
 } from 'lucide-react'
 import { hospitalApi } from '../../services/api/hospitalApi'
 import { PageHeader } from '../../components/ui'
@@ -176,6 +179,79 @@ export const AdminHubPage: React.FC = () => {
               </div>
             )
           })}
+        </div>
+
+        {/* Phase 13: System Governance, Security & Audit */}
+        <div className="pt-6">
+          <SectionHeader
+            title="System Governance, Compliance & Diagnostics"
+            description="Manage user provisioning, immutable audit trails, and server cluster health"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-4">
+            <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-2xs hover:border-slate-300 transition-colors flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg border bg-blue-50 text-blue-600 border-blue-100 flex items-center justify-center mb-3">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">User Management</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Provision system accounts, assign clinical/administrative roles, and inspect verification status.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-100 mt-4">
+                <Link
+                  to="/admin/users"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  <span>Manage Users</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-2xs hover:border-slate-300 transition-colors flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg border bg-indigo-50 text-indigo-600 border-indigo-100 flex items-center justify-center mb-3">
+                  <FileCheck2 className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">Audit Trails & HIPAA Logs</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Search write-only immutable logs for reports access, billing events, and bed transfers.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-100 mt-4">
+                <Link
+                  to="/admin/audit-logs"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  <span>View Audit Logs</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-2xs hover:border-slate-300 transition-colors flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg border bg-emerald-50 text-emerald-600 border-emerald-100 flex items-center justify-center mb-3">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">Diagnostics & Health</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Real-time database connectivity, API latency response times, and cluster uptime monitors.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-100 mt-4">
+                <Link
+                  to="/admin/health"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  <span>Check Health</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

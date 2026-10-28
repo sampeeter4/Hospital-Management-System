@@ -43,6 +43,14 @@ export const authApi = {
     const response = await apiClient.patch<User>('/accounts/profile/', payload)
     return response.data
   },
+
+  /**
+   * Changes current user password via POST /api/v1/accounts/change-password/
+   */
+  async changePassword(payload: { old_password: string; new_password: string }): Promise<{ message: string }> {
+    const response = await apiClient.post<{ message: string }>('/accounts/change-password/', payload)
+    return response.data
+  },
 }
 
 export default authApi
