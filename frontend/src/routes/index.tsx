@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  CreditCard,
   BarChart3,
 } from 'lucide-react'
 
@@ -73,6 +72,13 @@ import InpatientDashboardPage from '../pages/inpatient/InpatientDashboardPage'
 import AdmissionListPage from '../pages/inpatient/AdmissionListPage'
 import AdmissionDetailsPage from '../pages/inpatient/AdmissionDetailsPage'
 import AdmissionCreatePage from '../pages/inpatient/AdmissionCreatePage'
+
+// Phase 11: Billing, Payments & Insurance Pages
+import InvoiceListPage from '../pages/billing/InvoiceListPage'
+import InvoiceDetailsPage from '../pages/billing/InvoiceDetailsPage'
+import InvoiceCreatePage from '../pages/billing/InvoiceCreatePage'
+import PaymentListPage from '../pages/billing/PaymentListPage'
+import InsuranceClaimsPage from '../pages/billing/InsuranceClaimsPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -723,6 +729,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 11: Billing, Payments & Insurance Management
           {
             path: '/billing',
             element: (
@@ -735,12 +742,86 @@ export const router = createBrowserRouter([
                   ROLES.PATIENT,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Billing, Payments & Insurance"
-                  phaseNumber={11}
-                  description="Patient invoicing, receipt generation, multi-mode payment collection, insurance pre-auth, and claims tracking."
-                  icon={CreditCard}
-                />
+                <InvoiceListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/billing/invoices',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.ACCOUNTANT,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <InvoiceListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/billing/invoices/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.ACCOUNTANT,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <InvoiceCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/billing/invoices/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.ACCOUNTANT,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <InvoiceDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/billing/payments',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.ACCOUNTANT,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <PaymentListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/billing/insurance',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.ACCOUNTANT,
+                  ROLES.DOCTOR,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <InsuranceClaimsPage />
               </RoleRoute>
             ),
           },
