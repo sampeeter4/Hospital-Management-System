@@ -1,7 +1,4 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import {
-  BarChart3,
-} from 'lucide-react'
 
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
@@ -9,7 +6,6 @@ import LoginPage from '../pages/auth/LoginPage'
 import DashboardPage from '../pages/dashboard/DashboardPage'
 import NotFoundPage from '../pages/errors/NotFoundPage'
 import ForbiddenPage from '../pages/errors/ForbiddenPage'
-import ModulePlaceholder from '../components/common/ModulePlaceholder'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoute'
 import RoleRoute from './RoleRoute'
@@ -79,6 +75,11 @@ import InvoiceDetailsPage from '../pages/billing/InvoiceDetailsPage'
 import InvoiceCreatePage from '../pages/billing/InvoiceCreatePage'
 import PaymentListPage from '../pages/billing/PaymentListPage'
 import InsuranceClaimsPage from '../pages/billing/InsuranceClaimsPage'
+
+// Phase 12: Notifications & Reports Pages
+import NotificationListPage from '../pages/notifications/NotificationListPage'
+import NotificationPreferencesPage from '../pages/notifications/NotificationPreferencesPage'
+import ReportsHubPage from '../pages/reports/ReportsHubPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -825,6 +826,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 12: Notifications & Reports
           {
             path: '/reports',
             element: (
@@ -834,14 +836,50 @@ export const router = createBrowserRouter([
                   ROLES.HOSPITAL_ADMIN,
                   ROLES.ACCOUNTANT,
                   ROLES.DOCTOR,
+                  ROLES.NURSE,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Notifications & Reports"
-                  phaseNumber={12}
-                  description="Hospital operational metrics, clinical census reports, financial aggregates, CSV exports, and audit trails."
-                  icon={BarChart3}
-                />
+                <ReportsHubPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/notifications',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.PHARMACIST,
+                  ROLES.ACCOUNTANT,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <NotificationListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/notifications/preferences',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.PHARMACIST,
+                  ROLES.ACCOUNTANT,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <NotificationPreferencesPage />
               </RoleRoute>
             ),
           },
