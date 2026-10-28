@@ -27,6 +27,33 @@ class IsHospitalAdminOrReadOnly(BasePermission):
         return request.user.role in ["SUPER_ADMIN", "HOSPITAL_ADMIN"]
 
 
+class IsStaffPersonnel(BasePermission):
+    """
+    Allows read access only to hospital staff and administrative personnel (blocks patients).
+    Write access is restricted to Super Admins and Hospital Admins.
+    """
+
+    STAFF_ROLES = [
+        "SUPER_ADMIN",
+        "HOSPITAL_ADMIN",
+        "DOCTOR",
+        "NURSE",
+        "RECEPTIONIST",
+        "LAB_TECHNICIAN",
+        "PHARMACIST",
+        "ACCOUNTANT",
+    ]
+
+    def has_permission(self, request, view):
+        if not (request.user and request.user.is_authenticated):
+            return False
+        if request.user.role not in self.STAFF_ROLES:
+            return False
+        if request.method in ["GET", "HEAD", "OPTIONS"]:
+            return True
+        return request.user.role in ["SUPER_ADMIN", "HOSPITAL_ADMIN"]
+
+
 class IsDoctor(BasePermission):
     """
     Allows access only to Doctors.

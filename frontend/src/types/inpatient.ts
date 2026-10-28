@@ -231,3 +231,4 @@ export interface BedFilterParams {
   status?: BedStatus
   bed_type?: BedType
 }
+

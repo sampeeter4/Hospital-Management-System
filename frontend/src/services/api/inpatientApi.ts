@@ -136,3 +136,4 @@ export const inpatientApi = {
     return res.data
   },
 }
+

@@ -75,3 +75,4 @@ export const medicalRecordApi = {
     return response.data
   },
 }
+

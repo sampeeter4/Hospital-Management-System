@@ -34,3 +34,4 @@ export interface NotificationPreference {
   admission_alerts_enabled: boolean
   updated_at: string
 }
+

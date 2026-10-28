@@ -295,3 +295,4 @@ export interface PaymentFilterParams {
   patient?: number
   hospital?: number
 }
+

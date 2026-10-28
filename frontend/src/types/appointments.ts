@@ -102,3 +102,4 @@ export interface AppointmentFilterParams {
   page?: number
   page_size?: number
 }
+

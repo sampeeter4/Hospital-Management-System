@@ -71,3 +71,4 @@ export interface PatientFilterParams {
   page?: number
   page_size?: number
 }
+

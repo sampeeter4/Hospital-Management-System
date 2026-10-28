@@ -110,3 +110,4 @@ export interface PrescriptionFilterParams {
   page?: number
   page_size?: number
 }
+

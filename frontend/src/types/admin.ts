@@ -61,3 +61,4 @@ export interface ClinicalBillingAuditEntry {
   metadata: Record<string, unknown> | null
   created_at: string
 }
+

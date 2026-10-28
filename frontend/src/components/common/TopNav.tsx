@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Menu, Search, Bell, User as UserIcon, LogOut, Shield, KeyRound, LayoutGrid } from 'lucide-react'
+import { Menu, Search, Bell, User as UserIcon, LogOut, Shield, KeyRound, LayoutGrid, Sun, Moon } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useNotifications } from '../../hooks/dashboard/useNotifications'
+import { useTheme } from '../../hooks/useTheme'
 import { ROLE_LABELS, ROLES } from '../../constants/roles'
 
 interface TopNavProps {
@@ -18,6 +19,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   const navigate = useNavigate()
   const { user, role, logout } = useAuth()
   const { unreadCount } = useNotifications()
+  const { theme, toggleTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -44,7 +46,7 @@ export const TopNav: React.FC<TopNavProps> = ({
     'Hospital Overview'
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
+    <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 transition-colors">
       {/* Left side: Hamburger button (mobile) & Breadcrumbs */}
       <div className="flex items-center gap-3">
         <button
@@ -75,6 +77,21 @@ export const TopNav: React.FC<TopNavProps> = ({
             className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition-colors"
           />
         </div>
+
+        {/* Dark Mode Toggle */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-4 h-4 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 text-slate-500" />
+          )}
+        </button>
 
         {/* Notifications Icon with Real Unread Count Badge */}
         <button

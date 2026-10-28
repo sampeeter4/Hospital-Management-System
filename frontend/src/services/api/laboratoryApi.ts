@@ -129,3 +129,4 @@ export const laboratoryApi = {
     return res.data
   },
 }
+

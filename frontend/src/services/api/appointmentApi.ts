@@ -116,3 +116,4 @@ export const appointmentApi = {
     return response.data.results || []
   },
 }
+

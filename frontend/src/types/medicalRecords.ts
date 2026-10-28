@@ -100,3 +100,4 @@ export interface EncounterFilterParams {
   page?: number
   page_size?: number
 }
+

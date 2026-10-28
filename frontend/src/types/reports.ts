@@ -25,3 +25,4 @@ export interface ReportDateRange {
   end_date?: string
   hospital?: number
 }
+

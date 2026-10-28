@@ -290,3 +290,4 @@ export const PrescriptionDetailsPage: React.FC = () => {
 }
 
 export default PrescriptionDetailsPage
+

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from common.permissions import IsHospitalAdminOrReadOnly
+from common.permissions import IsHospitalAdminOrReadOnly, IsStaffPersonnel
 from .models import (
     Department,
     Doctor,
@@ -88,7 +88,7 @@ class StaffViewSet(viewsets.ModelViewSet):
         "department",
     ).all()
     serializer_class = StaffSerializer
-    permission_classes = [IsHospitalAdminOrReadOnly]
+    permission_classes = [IsStaffPersonnel]
     filterset_fields = ["hospital", "department", "is_active", "designation"]
     search_fields = [
         "user__first_name",

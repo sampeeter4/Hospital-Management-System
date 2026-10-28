@@ -267,3 +267,4 @@ export interface LabResultFilterParams {
   is_abnormal?: boolean
   ordering?: string
 }
+

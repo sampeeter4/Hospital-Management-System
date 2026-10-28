@@ -90,3 +90,4 @@ export const pharmacyApi = {
     return response.data
   },
 }
+

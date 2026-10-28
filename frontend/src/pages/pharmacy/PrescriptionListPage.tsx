@@ -232,3 +232,4 @@ export const PrescriptionListPage: React.FC = () => {
 }
 
 export default PrescriptionListPage
+
