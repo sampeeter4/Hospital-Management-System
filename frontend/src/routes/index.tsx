@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  Bed,
   CreditCard,
   BarChart3,
 } from 'lucide-react'
@@ -68,6 +67,12 @@ import LabOrderDetailsPage from '../pages/laboratory/LabOrderDetailsPage'
 import LabOrderCreatePage from '../pages/laboratory/LabOrderCreatePage'
 import LabResultEntryPage from '../pages/laboratory/LabResultEntryPage'
 import LabCataloguePage from '../pages/laboratory/LabCataloguePage'
+
+// Phase 10: Inpatient, Beds & Wards Pages
+import InpatientDashboardPage from '../pages/inpatient/InpatientDashboardPage'
+import AdmissionListPage from '../pages/inpatient/AdmissionListPage'
+import AdmissionDetailsPage from '../pages/inpatient/AdmissionDetailsPage'
+import AdmissionCreatePage from '../pages/inpatient/AdmissionCreatePage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -636,6 +641,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 10: Inpatient, Beds & Wards Management
           {
             path: '/inpatient',
             element: (
@@ -648,12 +654,72 @@ export const router = createBrowserRouter([
                   ROLES.RECEPTIONIST,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Inpatient, Beds & Wards"
-                  phaseNumber={10}
-                  description="Hospital ward census, bed allocations, room occupancy charts, admission orders, rounds, and discharge summaries."
-                  icon={Bed}
-                />
+                <InpatientDashboardPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/inpatient/wards',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <InpatientDashboardPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/inpatient/admissions',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <AdmissionListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/inpatient/admissions/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <AdmissionCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/inpatient/admissions/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <AdmissionDetailsPage />
               </RoleRoute>
             ),
           },
