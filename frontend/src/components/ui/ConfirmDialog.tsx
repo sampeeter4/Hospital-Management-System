@@ -3,37 +3,56 @@ import { AlertTriangle, X } from 'lucide-react'
 
 interface ConfirmDialogProps {
   isOpen: boolean
-  onClose: () => void
+  onClose?: () => void
+  onCancel?: () => void
   onConfirm: () => void
   title: string
-  message: string
+  message?: string
+  description?: string
   confirmText?: string
+  confirmLabel?: string
   cancelText?: string
+  cancelLabel?: string
   variant?: 'danger' | 'warning' | 'primary'
   isLoading?: boolean
+  children?: React.ReactNode
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
   onClose,
+  onCancel,
   onConfirm,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  description,
+  confirmText,
+  confirmLabel,
+  cancelText,
+  cancelLabel,
   variant = 'danger',
   isLoading = false,
+  children,
 }) => {
+  const handleClose = () => {
+    if (onCancel) onCancel()
+    else if (onClose) onClose()
+  }
+  const displayMessage = description || message || ''
+  const displayConfirm = confirmLabel || confirmText || 'Confirm'
+  const displayCancel = cancelLabel || cancelText || 'Cancel'
+
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen && !isLoading) {
-        onClose()
+        if (onCancel) onCancel()
+        else if (onClose) onClose()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, isLoading, onClose])
+  }, [isOpen, isLoading, onCancel, onClose])
 
   if (!isOpen) return null
 
@@ -64,7 +83,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <div className="bg-white rounded-lg border border-slate-200 max-w-md w-full p-6 shadow-xl relative animate-in zoom-in-95 duration-150">
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           disabled={isLoading}
           aria-label="Close dialog"
           className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1 rounded-md cursor-pointer"
@@ -83,18 +102,21 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             <h3 id="dialog-title" className="text-sm font-bold text-slate-900">
               {title}
             </h3>
-            <p className="text-xs text-slate-600 mt-1 leading-relaxed">{message}</p>
+            {displayMessage && (
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed">{displayMessage}</p>
+            )}
+            {children}
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-2.5">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isLoading}
             className="px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors cursor-pointer"
           >
-            {cancelText}
+            {displayCancel}
           </button>
           <button
             type="button"
@@ -102,7 +124,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             disabled={isLoading}
             className={`px-3.5 py-1.5 text-xs font-semibold rounded-md shadow-2xs transition-colors cursor-pointer disabled:opacity-50 ${currentVariant.btn}`}
           >
-            {isLoading ? 'Processing...' : confirmText}
+            {isLoading ? 'Processing...' : displayConfirm}
           </button>
         </div>
       </div>

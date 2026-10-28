@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  Calendar,
   FileText,
   Pill,
   FlaskConical,
@@ -48,6 +47,12 @@ import PatientListPage from '../pages/patients/PatientListPage'
 import PatientDetailsPage from '../pages/patients/PatientDetailsPage'
 import PatientCreatePage from '../pages/patients/PatientCreatePage'
 import PatientEditPage from '../pages/patients/PatientEditPage'
+
+// Phase 6: Appointments & Scheduling Pages
+import AppointmentListPage from '../pages/appointments/AppointmentListPage'
+import AppointmentDetailsPage from '../pages/appointments/AppointmentDetailsPage'
+import AppointmentCreatePage from '../pages/appointments/AppointmentCreatePage'
+import AppointmentEditPage from '../pages/appointments/AppointmentEditPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -327,6 +332,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 6: Appointments & Scheduling
           {
             path: '/appointments',
             element: (
@@ -340,12 +346,55 @@ export const router = createBrowserRouter([
                   ROLES.PATIENT,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Appointments & Scheduling"
-                  phaseNumber={6}
-                  description="Consultation booking slots, doctor calendars, waiting queue management, check-in, and rescheduling."
-                  icon={Calendar}
-                />
+                <AppointmentListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/appointments/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <AppointmentCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/appointments/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.RECEPTIONIST,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <AppointmentDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/appointments/:id/edit',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.RECEPTIONIST,
+                ]}
+              >
+                <AppointmentEditPage />
               </RoleRoute>
             ),
           },
