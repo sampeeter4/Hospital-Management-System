@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  Pill,
   FlaskConical,
   Bed,
   CreditCard,
@@ -57,6 +56,12 @@ import AppointmentEditPage from '../pages/appointments/AppointmentEditPage'
 import MedicalRecordListPage from '../pages/medical-records/MedicalRecordListPage'
 import MedicalRecordDetailsPage from '../pages/medical-records/MedicalRecordDetailsPage'
 import EncounterCreatePage from '../pages/medical-records/EncounterCreatePage'
+
+// Phase 8: Prescriptions & Pharmacy Pages
+import PrescriptionListPage from '../pages/pharmacy/PrescriptionListPage'
+import PrescriptionDetailsPage from '../pages/pharmacy/PrescriptionDetailsPage'
+import PrescriptionCreatePage from '../pages/pharmacy/PrescriptionCreatePage'
+import PharmacyInventoryPage from '../pages/pharmacy/PharmacyInventoryPage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -448,6 +453,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 8: Prescriptions & Pharmacy Management
           {
             path: '/pharmacy',
             element: (
@@ -457,14 +463,73 @@ export const router = createBrowserRouter([
                   ROLES.HOSPITAL_ADMIN,
                   ROLES.PHARMACIST,
                   ROLES.DOCTOR,
+                  ROLES.NURSE,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Pharmacy & Prescriptions"
-                  phaseNumber={8}
-                  description="Formulary catalog, batch tracking, expiry monitoring, doctor e-prescriptions, and medication dispensing."
-                  icon={Pill}
-                />
+                <PrescriptionListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/pharmacy/prescriptions',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.PHARMACIST,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <PrescriptionListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/pharmacy/prescriptions/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                ]}
+              >
+                <PrescriptionCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/pharmacy/prescriptions/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.PHARMACIST,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <PrescriptionDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/pharmacy/inventory',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.PHARMACIST,
+                  ROLES.DOCTOR,
+                ]}
+              >
+                <PharmacyInventoryPage />
               </RoleRoute>
             ),
           },
