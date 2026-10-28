@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  FileText,
   Pill,
   FlaskConical,
   Bed,
@@ -53,6 +52,11 @@ import AppointmentListPage from '../pages/appointments/AppointmentListPage'
 import AppointmentDetailsPage from '../pages/appointments/AppointmentDetailsPage'
 import AppointmentCreatePage from '../pages/appointments/AppointmentCreatePage'
 import AppointmentEditPage from '../pages/appointments/AppointmentEditPage'
+
+// Phase 7: Medical Records & Clinical Documentation Pages
+import MedicalRecordListPage from '../pages/medical-records/MedicalRecordListPage'
+import MedicalRecordDetailsPage from '../pages/medical-records/MedicalRecordDetailsPage'
+import EncounterCreatePage from '../pages/medical-records/EncounterCreatePage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -398,6 +402,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 7: Medical Records & Clinical Documentation
           {
             path: '/medical-records',
             element: (
@@ -409,12 +414,37 @@ export const router = createBrowserRouter([
                   ROLES.NURSE,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Medical Records & Clinical Documentation"
-                  phaseNumber={7}
-                  description="Electronic medical records (EMR), SOAP clinical encounter notes, diagnostic summaries, and vital sign logs."
-                  icon={FileText}
-                />
+                <MedicalRecordListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/medical-records/encounters/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                ]}
+              >
+                <EncounterCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/medical-records/encounters/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <MedicalRecordDetailsPage />
               </RoleRoute>
             ),
           },
