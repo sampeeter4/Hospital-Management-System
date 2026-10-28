@@ -8,6 +8,12 @@ interface PageHeaderProps {
   backTo?: string
   backLabel?: string
   actions?: ReactNode
+  action?: {
+    label: string
+    icon?: ReactNode
+    onClick: () => void | Promise<void>
+  }
+  children?: ReactNode
   className?: string
 }
 
@@ -17,6 +23,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   backTo,
   backLabel = 'Back',
   actions,
+  action,
+  children,
   className = '',
 }) => {
   return (
@@ -41,9 +49,20 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           )}
         </div>
 
-        {actions && (
-          <div className="flex items-center gap-2.5 shrink-0">{actions}</div>
-        )}
+        <div className="flex items-center gap-2.5 shrink-0">
+          {actions}
+          {action && (
+            <button
+              type="button"
+              onClick={action.onClick}
+              className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-xs transition-colors"
+            >
+              {action.icon}
+              <span>{action.label}</span>
+            </button>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   )

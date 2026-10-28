@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
-  FlaskConical,
   Bed,
   CreditCard,
   BarChart3,
@@ -62,6 +61,13 @@ import PrescriptionListPage from '../pages/pharmacy/PrescriptionListPage'
 import PrescriptionDetailsPage from '../pages/pharmacy/PrescriptionDetailsPage'
 import PrescriptionCreatePage from '../pages/pharmacy/PrescriptionCreatePage'
 import PharmacyInventoryPage from '../pages/pharmacy/PharmacyInventoryPage'
+
+// Phase 9: Laboratory & Diagnostics Pages
+import LabOrderListPage from '../pages/laboratory/LabOrderListPage'
+import LabOrderDetailsPage from '../pages/laboratory/LabOrderDetailsPage'
+import LabOrderCreatePage from '../pages/laboratory/LabOrderCreatePage'
+import LabResultEntryPage from '../pages/laboratory/LabResultEntryPage'
+import LabCataloguePage from '../pages/laboratory/LabCataloguePage'
 
 export const router = createBrowserRouter([
   // Public Routes (Redirect to /dashboard if already authenticated)
@@ -533,6 +539,7 @@ export const router = createBrowserRouter([
               </RoleRoute>
             ),
           },
+          // Phase 9: Laboratory & Diagnostics Management
           {
             path: '/laboratory',
             element: (
@@ -542,14 +549,90 @@ export const router = createBrowserRouter([
                   ROLES.HOSPITAL_ADMIN,
                   ROLES.LAB_TECHNICIAN,
                   ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
                 ]}
               >
-                <ModulePlaceholder
-                  title="Laboratory & Diagnostics"
-                  phaseNumber={9}
-                  description="Pathology & radiology test orders, specimen accessioning, analyte entry, report verification, and critical flags."
-                  icon={FlaskConical}
-                />
+                <LabOrderListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/laboratory/orders',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <LabOrderListPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/laboratory/orders/new',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.DOCTOR,
+                ]}
+              >
+                <LabOrderCreatePage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/laboratory/orders/:id',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                  ROLES.PATIENT,
+                ]}
+              >
+                <LabOrderDetailsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/laboratory/results/enter',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.DOCTOR,
+                ]}
+              >
+                <LabResultEntryPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/laboratory/catalogue',
+            element: (
+              <RoleRoute
+                allowedRoles={[
+                  ROLES.SUPER_ADMIN,
+                  ROLES.HOSPITAL_ADMIN,
+                  ROLES.LAB_TECHNICIAN,
+                  ROLES.DOCTOR,
+                  ROLES.NURSE,
+                ]}
+              >
+                <LabCataloguePage />
               </RoleRoute>
             ),
           },

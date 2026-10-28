@@ -14,6 +14,7 @@ interface ConfirmDialogProps {
   cancelText?: string
   cancelLabel?: string
   variant?: 'danger' | 'warning' | 'primary'
+  isDestructive?: boolean
   isLoading?: boolean
   children?: React.ReactNode
 }
@@ -31,9 +32,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   cancelText,
   cancelLabel,
   variant = 'danger',
+  isDestructive,
   isLoading = false,
   children,
 }) => {
+  const effectiveVariant = isDestructive ? 'danger' : variant
   const handleClose = () => {
     if (onCancel) onCancel()
     else if (onClose) onClose()
@@ -71,7 +74,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     },
   }
 
-  const currentVariant = variantStyles[variant]
+  const currentVariant = variantStyles[effectiveVariant]
 
   return (
     <div

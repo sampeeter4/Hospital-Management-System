@@ -2,10 +2,11 @@ import { ReactNode } from 'react'
 import { Inbox } from 'lucide-react'
 
 export interface Column<T> {
-  key: string
+  key?: string
   header?: string
   title?: string
   render?: (item: T) => ReactNode
+  accessor?: (item: T) => ReactNode
   className?: string
   align?: 'left' | 'center' | 'right'
 }
@@ -15,9 +16,11 @@ interface DataTableProps<T> {
   data: T[]
   keyExtractor: (item: T) => string | number
   isLoading?: boolean
+  error?: string | null
   emptyMessage?: string
   emptyTitle?: string
   emptyState?: ReactNode
+  onRowClick?: (item: T) => void
   className?: string
 }
 
@@ -26,9 +29,11 @@ export function DataTable<T>({
   data,
   keyExtractor,
   isLoading = false,
+  error,
   emptyMessage = 'No records found matching your filters.',
   emptyTitle = 'No Records',
   emptyState,
+  onRowClick,
   className = '',
 }: DataTableProps<T>) {
   if (isLoading) {
@@ -40,6 +45,14 @@ export function DataTable<T>({
             <div key={i} className="h-8 bg-slate-100 rounded" />
           ))}
         </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-rose-50 border border-rose-200 rounded-lg p-6 text-center text-xs text-rose-700">
+        {error}
       </div>
     )
   }
@@ -69,9 +82,9 @@ export function DataTable<T>({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50/75 text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-              {columns.map((col) => (
+              {columns.map((col, idx) => (
                 <th
-                  key={col.key}
+                  key={col.key || col.header || String(idx)}
                   className={`py-3 px-4 ${
                     col.align === 'right'
                       ? 'text-right'
@@ -87,10 +100,16 @@ export function DataTable<T>({
           </thead>
           <tbody className="divide-y divide-slate-100 text-xs text-slate-800">
             {data.map((item) => (
-              <tr key={keyExtractor(item)} className="hover:bg-slate-50/60 transition-colors">
-                {columns.map((col) => (
+              <tr
+                key={keyExtractor(item)}
+                onClick={() => onRowClick && onRowClick(item)}
+                className={`transition-colors ${
+                  onRowClick ? 'cursor-pointer hover:bg-slate-50' : 'hover:bg-slate-50/60'
+                }`}
+              >
+                {columns.map((col, idx) => (
                   <td
-                    key={col.key}
+                    key={col.key || col.header || String(idx)}
                     className={`py-3 px-4 ${
                       col.align === 'right'
                         ? 'text-right'
@@ -99,9 +118,11 @@ export function DataTable<T>({
                         : 'text-left'
                     } ${col.className || ''}`}
                   >
-                    {col.render
+                    {col.accessor
+                      ? col.accessor(item)
+                      : col.render
                       ? col.render(item)
-                      : String((item as Record<string, unknown>)[col.key] ?? '—')}
+                      : String((item as Record<string, unknown>)[col.key || ''] ?? '—')}
                   </td>
                 ))}
               </tr>
