@@ -69,3 +69,4 @@ The HMS application is a multi-tier, mission-critical healthcare application com
 - **Pass**: Zero data leakage between distinct patients or unauthenticated requests.
 - **Pass**: Zero ESLint warnings (`npm run lint`), passing Vite production build (`npm run build`).
 - **Fail**: Any authentication bypass, unhandled SQL exception, or unauthorized clinical data exposure.
+

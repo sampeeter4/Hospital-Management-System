@@ -49,3 +49,4 @@ The system demonstrated robust security defenses overall, passing **10 out of 11
 - **Vulnerability**: Patient role accounts can query employee IDs and internal designations from `/api/v1/staff/`.
 - **Root Cause**: `StaffViewSet` in `backend/hospitals/views.py` used `IsHospitalAdminOrReadOnly`. Because `IsHospitalAdminOrReadOnly` permits read methods (`GET`) to any authenticated user, patients can query the endpoint.
 - **Remediation**: Update `StaffViewSet.permission_classes` to restrict read operations to staff roles (`SUPER_ADMIN`, `HOSPITAL_ADMIN`, `DOCTOR`, `NURSE`, `RECEPTIONIST`, `PHARMACIST`, `LAB_TECHNICIAN`, `ACCOUNTANT`).
+

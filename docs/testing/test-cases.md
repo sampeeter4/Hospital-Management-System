@@ -19,7 +19,7 @@
 | **TC-AUTH-06** | Authentication | Tampered Refresh Token | Server active | `POST /api/v1/accounts/token/refresh/` | `refresh="invalid.jwt.signature"` | HTTP 401 Unauthorized | HTTP 401 Unauthorized | **PASS** | High |
 | **TC-AUTH-07** | Authentication | Unauthenticated Profile Request | No auth header | `GET /api/v1/accounts/profile/` | None | HTTP 401 Unauthorized | HTTP 401 Unauthorized | **PASS** | Critical |
 | **TC-AUTH-08** | Authentication | Authenticated Profile Retrieval | Valid admin token | `GET /api/v1/accounts/profile/` | Bearer Token (`admin`) | HTTP 200, profile fields returned | HTTP 200, username=admin | **PASS** | High |
-| **TC-RBAC-01** | RBAC | Patient Accessing Staff Directory | `patient_john` token | `GET /api/v1/staff/` | Bearer Token (`patient_john`) | Expected HTTP 403 Forbidden | Actual HTTP 200 OK (Allowed by `IsHospitalAdminOrReadOnly`) | **FAIL** | High |
+| **TC-RBAC-01** | RBAC | Patient Accessing Staff Directory | `patient_john` token | `GET /api/v1/staff/` | Bearer Token (`patient_john`) | Expected HTTP 403 Forbidden | Post-fix: HTTP 403 Forbidden (Cycle 1: 200 OK via BUG-001) | **PASS (Fixed)** | High |
 | **TC-RBAC-02** | RBAC | Patient Accessing Inpatient Wards | `patient_john` token | `GET /api/v1/inpatient/wards/` | Bearer Token (`patient_john`) | HTTP 403 Forbidden | HTTP 403 Forbidden | **PASS** | High |
 | **TC-RBAC-03** | RBAC | Doctor Accessing Patient Registry | `dr_sharma` token | `GET /api/v1/patients/` | Bearer Token (`dr_sharma`) | HTTP 200 OK, returns patient records | HTTP 200 OK | **PASS** | High |
 | **TC-RBAC-04** | RBAC | Pharmacist Accessing Drug Inventory | `pharm_alex` token | `GET /api/v1/pharmacy/medicines/` | Bearer Token (`pharm_alex`) | HTTP 200 OK, returns stock inventory | HTTP 200 OK | **PASS** | High |
@@ -34,3 +34,4 @@
 | **TC-INP-01** | Inpatient | Ward Bed Census Count Consistency | Wards exist | Inspect `total_beds >= occupied + available` | Ward W-GEN-01 | Bed counts mathematically consistent | Verified consistent | **PASS** | High |
 | **TC-PHARM-01**| Pharmacy | Medicine Threshold Non-Negative | Medicines exist | Inspect `low_stock_threshold >= 0` | All medicines | Non-negative integer | Verified non-negative | **PASS** | Medium |
 | **TC-UI-01** | UI / Theme | Dark Mode Toggle Initialization | App loaded | Click theme switch icon in TopNav | Click toggle | `.dark` class toggled on `<html>`, state saved to `localStorage` | Verified class & storage | **PASS** | Low |
+

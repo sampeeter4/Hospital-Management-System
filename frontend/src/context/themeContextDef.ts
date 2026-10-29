@@ -11,3 +11,4 @@ export interface ThemeContextType {
 export const THEME_STORAGE_KEY = 'metrocare_theme_preference'
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+
